@@ -41,17 +41,21 @@ The problem is — any machine on the network can reply. So an attacker can say 
 ## How the Attack Works
 
 ## LLMNR Poisoning Flow
-Victim Network Attacker
-| | |
-|--- DNS request ----------->| |
-|<-- DNS: "I don't know" ----| |
-| | |
-|--- LLMNR broadcast ------->| |
-| "Who knows fileserver?" |<-- Responder listening ---|
-| | |
-|<-- "I know! I am him!" ----|---------------------------|
-| | |
-|--- NTLMv2 Hash ----------->|-------------------------->|
-| (credentials sent) | |
-Attacker captures
-NTLMv2 hash
+
+\`\`\`
+Victim                    Network                         Attacker
+  |                          |                               |
+  |--- DNS request --------->|                               |
+  |<-- DNS: "I don't know" --|                               |
+  |                          |                               |
+  |--- LLMNR broadcast ----->|                               |
+  |    "Who knows            |<-- Responder listening -------|
+  |     fileserver?"         |                               |
+  |                          |                               |
+  |<-- "I know! I am him!" --|-------------------------------|
+  |                          |                               |
+  |--- NTLMv2 Hash --------->|------------------------------>|
+  |    (credentials sent)    |                               |
+  |                          |                 Attacker captures
+  |                          |                 NTLMv2 hash
+\`\`\`
