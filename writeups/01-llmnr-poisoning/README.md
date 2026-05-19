@@ -133,6 +133,7 @@ Both machines on same VirtualBox Host-Only network.
 ip a
 
 ```
+![Output](images/step-1.png)
 
 
 
