@@ -102,6 +102,8 @@ sudo responder -I eth0 -dwv
 ```
 Responder will now listen on the network and wait for someone to broadcast a name request.
 
+![Responder Output](images/step-2.png)
+
 
 ### Step 3 — Trigger from Victim Machine
 
