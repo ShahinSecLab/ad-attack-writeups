@@ -78,7 +78,10 @@ Both machines on same VirtualBox Host-Only network.
 ```bash
 ip a
 ```
-![Output](images/step1.png)
+<p align="center">
+  <img src="/writeups/01-llmnr-poisoning/images/step1.png" width="600">
+</p>
+
 
 ## Output:
 ```
