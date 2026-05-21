@@ -111,12 +111,21 @@ SMB Relay is a network attack where an attacker captures a user's authentication
 ```bash
 sudo nano /etc/responder/Responder.conf
 ```
+
+<p align="center">
+  <img src="/writeups/02-smb-relay/images/step1-1.png" width="600">
+</p>
+
 - Find these lines and change them:
 
 ```bash
 SMB = Off
 HTTP = Off
 ```
+
+<p align="center">
+  <img src="/writeups/02-smb-relay/images/step1-2.png" width="600">
+</p>
 
 - Save and exit:
 
@@ -137,7 +146,7 @@ nmap --script smb2-security-mode -p 445 192.168.5.0/24
 ```
 
 ```
-|             Flag            |                               | Meaning                                                   |
+|             Flag            |                                 Meaning                                                   |
 |-----------------------------|-------------------------------------------------------------------------------------------|
 | nmap                        | Network scanning tool used for reconnaissance                                             |
 | --script smb2-security-mode | Runs an Nmap NSE script to check SMB v2/v3 security configuration, especially SMB signing |
