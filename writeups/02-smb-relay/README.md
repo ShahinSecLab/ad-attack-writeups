@@ -25,7 +25,7 @@
 SMB Relay is a network attack where an attacker captures a user's authentication request and forwards it to victim machine instead of cracking the password. If the target system accepts the authentication, the attacker can gain access using the victim's session.
 
 # Lab Setup
-``
+```
 |    Machine         |      OS       |               Role                   |      Ip       |
 | ------------------ |------------------------------------------------------|---------------|
 | Attacker           | Kali Linux    | Attack machine                       | 192.168.5.128 |
@@ -166,3 +166,4 @@ CTRL + X
 Y
 ENTER
 ```
+
