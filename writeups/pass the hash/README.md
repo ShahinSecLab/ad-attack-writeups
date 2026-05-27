@@ -1,0 +1,15 @@
+## Table of Contents
+
+- [What's the Point](#whats-the-point)
+- [How NTLM Auth Actually Works](#how-ntlm-auth-actually-works)
+- [So What is Pass the Hash](#so-what-is-pass-the-hash)
+- [What You Need Before Starting](#what-you-need-before-starting)
+- [Attack Walkthrough](#attack-walkthrough)
+  - [Step 1: Get a Shell](#step-1-get-a-shell)
+  - [Step 2: Pull the Hashes](#step-2-pull-the-hashes)
+  - [Step 3: Use the Hash to Log In](#step-3-use-the-hash-to-log-in)
+  - [Step 4: Move Around the Network](#step-4-move-around-the-network)
+- [Tools](#tools)
+- [How to Stop This Attack](#how-to-stop-this-attack)
+- [How to Catch It Happening](#how-to-catch-it-happening)
+- [References](#references)
