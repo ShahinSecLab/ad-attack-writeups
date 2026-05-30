@@ -4,7 +4,7 @@
 **Author:** ShahinSecLab  
 **Category:** Network Attack / Credential Capture  
 **Difficulty:** Easy  
-**Tools:** Responder, Hashcat 
+**Tools:** crackmapexec, psexec.py, hashcat 
 
 ## Table of Contents
 

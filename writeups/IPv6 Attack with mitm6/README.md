@@ -4,7 +4,7 @@
 **Author:** ShahinSecLab  
 **Category:** Network Attack / Credential Capture  
 **Difficulty:** Easy  
-**Tools:** Responder, Hashcat 
+**Tools:** mitm6, ntlmrelayx.py
 
 ## Table of Contents
 1. [Overview](#overview)
