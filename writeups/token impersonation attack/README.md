@@ -193,13 +193,8 @@ The module creates a service on the target Windows system through SMB and runs a
 ```bash
 msf exploit(windows/smb/psexec) > options
 ```
-### options (Metasploit)
 
 The `options` command is used to display all available settings for a Metasploit module.
-
-```bash
-options
-```
 
 ### What it shows:
 
