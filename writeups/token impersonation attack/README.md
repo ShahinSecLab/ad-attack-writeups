@@ -23,7 +23,7 @@
 - [References](#references)
 - [Disclaimer](#disclaimer)
 
-# Introduction
+## Introduction
 
 In this lab, I practiced a Windows Token Impersonation attack.
 
@@ -33,7 +33,7 @@ If a privileged token is available on a compromised machine, it may be possible 
 
 The goal of this lab was to identify available tokens and impersonate a privileged account from an existing Meterpreter session.
 
-# lab Setup
+## lab Setup
 
 ```
 | Machine             | Role              |   Ip          |
@@ -43,7 +43,7 @@ The goal of this lab was to identify available tokens and impersonate a privileg
 | Windows Server 2019 | Domain Controller | 192.168.5.134 |
 ```
 
-# Attack Flow
+## Attack Flow
 
 ```
 Gain Initial Access
@@ -61,7 +61,7 @@ Impersonate Token
 Gain Elevated Privileges
 ```
 
-# Step 1 - Get a Meterpreter Session
+## Step 1 - Get a Meterpreter Session
 
 ### Starting Metasploit
 
@@ -196,11 +196,11 @@ msf exploit(windows/smb/psexec) > options
 
 The `options` command is used to display all available settings for a Metasploit module.
 
-### What it shows:
+**What it shows:**
 
 It lists all required and optional parameters for the selected module.
 
-### Example settings you may see:
+**Example settings you may see:**
 
 * **RHOSTS** → Target IP address
 * **RPORT** → Target port (default: 445 for SMB)
@@ -210,7 +210,7 @@ It lists all required and optional parameters for the selected module.
 * **LHOST** → Attacker IP address
 * **LPORT** → Listening port on attacker machine
 
-### Why it is used:
+**Why it is used:**
 
 * To check what values need to be set before running an exploit
 * To verify if all required fields are filled
@@ -257,7 +257,9 @@ Exploit target:
    0   Automatic
 View the full module info with the info, or info -d command.
 ```
-
+<p align="center">
+  <img src="/writeups/token impersonation attack/images/step1 1.4.png" width="600">
+</p>
 
 
 
