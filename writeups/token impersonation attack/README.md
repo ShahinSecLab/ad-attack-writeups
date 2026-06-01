@@ -193,6 +193,34 @@ The module creates a service on the target Windows system through SMB and runs a
 ```bash
 msf exploit(windows/smb/psexec) > options
 ```
+### options (Metasploit)
+
+The `options` command is used to display all available settings for a Metasploit module.
+
+```bash
+options
+```
+
+### What it shows:
+
+It lists all required and optional parameters for the selected module.
+
+### Example settings you may see:
+
+* **RHOSTS** → Target IP address
+* **RPORT** → Target port (default: 445 for SMB)
+* **SMBUSER** → Username for authentication
+* **SMBPASS** → Password or NTLM hash
+* **PAYLOAD** → Payload type to be used
+* **LHOST** → Attacker IP address
+* **LPORT** → Listening port on attacker machine
+
+### Why it is used:
+
+* To check what values need to be set before running an exploit
+* To verify if all required fields are filled
+* To avoid errors during execution
+
 
 **Output:**
 
