@@ -485,7 +485,15 @@ net group "Domain Admins" test /ADD /DOMAIN
 
 
 
+## Detection
 
+Things defenders can look for:
+
+Unusual privilege escalation activity
+New processes running as Administrator
+Event ID 4624
+Event ID 4672
+Event ID 4688
 
 # Key Takeaways
 
