@@ -477,6 +477,7 @@ test – The username of the new account.
 
 
 
+
 # Key Takeaways
 
 - Windows creates an access token when a user logs in.
