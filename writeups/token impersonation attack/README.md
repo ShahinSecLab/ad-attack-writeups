@@ -453,10 +453,22 @@ Microsoft Windows [Version 10.0.19045.2965]
 C:\Windows\system32>
 ```
 
+### Create a Domain User
 
+The following command creates a new domain user named `testuser` with the password `@testuser#!`:
 
+```bash
+net user test @shahin123#! /add /domain
+```
 
-
+```text
+Command Breakdown
+net user – Used to manage user accounts in Windows.
+test – The username of the new account.
+@shahin123#! – The password assigned to the account.
+/add – Creates a new user account.
+/domain – Performs the action on the Active Directory domain instead of the local machine.
+```
 
 
 
