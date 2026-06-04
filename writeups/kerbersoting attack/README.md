@@ -24,3 +24,27 @@
 - [Key Takeaways](#key-takeaways)
 - [MITRE ATT&CK Mapping](#mitre-attck-mapping)
 - [References](#references)
+
+## What is Kerberoasting?
+
+In Windows networks, services (like SQL Server, IIS, etc.) are registered with something called an SPN (Service Principal Name). When a user wants to access a service, Windows gives them an encrypted service ticket. That ticket is encrypted using the service account's password hash.
+Here is the problem — any logged-in domain user can request that ticket, no special permissions needed. An attacker can grab that ticket, take it offline, and crack it to recover the real password.
+
+## How Kerberoasting Works
+
+```
+Domain User
+     |
+     | Requests TGS Ticket
+     v
+Domain Controller
+     |
+     | Returns Ticket
+     | Encrypted with Service Account Password
+     v
+Attacker Extracts Ticket
+     |
+     | Offline Password Cracking
+     v
+Service Account Password Recovered
+```
