@@ -25,7 +25,7 @@
 - [Step 6 - Verify Access](#step-6---verify-access)
   - [6.1 Create Domain User](#step-61---create-a-domain-user)
   - [6.2 Add User to Domain Admins Group](#step-62---add-a-user-to-the-domain-admins-group)
-- [Step 7 - Dump All Hashes](#step-7--dump-all-hashes)
+- [Step 7 - Dump All Hashes](#step-7---dump-all-hashes)
 - [Key Takeaways](#key-takeaways)
 - [Mitigation](#mitigation)
 
