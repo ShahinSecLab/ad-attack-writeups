@@ -122,17 +122,25 @@ Once the command runs successfully, I get a full interactive shell on the Domain
 **Output:**
 
 ```text
-*Evil-WinRM* PS C:\Users\Administrator\Documents>
+*Evil-WinRM* PS C:\Users\Administrator\Documents> whoami
+readteambd\administrator
 ```
+### Result
 
+```
+|      Field        |                 Value                          |
+|-------------------|------------------------------------------------|
+| **Target IP**     | `192.168.5.134`                                |
+| **User**          | `administrator`                                |
+| **Hash Used**     | `fc525c9683e8fe067095ba2ddc971889`             |
+| **Shell**         | Got a full PowerShell session as Administrator |
+| **Whoami Output** | `readteambd\administrator`                     |
+```
+I successfully logged in as **Domain Administrator** without ever knowing the real password — just the hash was enough to own the box.
 
-
-
-
-
-
-
-
+<p align="center">
+  <img src="/writeups/ntds dump/images/step3.png" width="600">
+</p>
 
 
 ## What I Achieved
