@@ -152,6 +152,4 @@ mimikatz # lsadump::lsa /inject /name:krbtgt
 | `/name:krbtgt` | Targets specifically the `krbtgt` account                 |
 ```
 
-### What This Does
-
 Instead of dumping all accounts like `lsadump::lsa /patch`, this command goes after one specific account — `krbtgt`. This is the account I need to forge a Golden Ticket. It gives me the NTLM hash and the domain SID in one shot.
