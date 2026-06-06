@@ -23,3 +23,24 @@
 
 A Golden Ticket is a forged Kerberos ticket that gives an attacker unlimited access to every resource in the domain — forever, or until the krbtgt account password is changed twice.
 The whole attack is based on one thing — the krbtgt account. This is a special account in Active Directory that signs every single Kerberos ticket in the domain. If I get its password hash, I can forge my own tickets and pretend to be any user, including Domain Admin — without ever touching the real account.
+
+# Why This Attack is Dangerous
+
+- The forged ticket works even if the real user's password is changed
+- It bypasses normal authentication completely
+- It can last for 10 years by default
+- It is very hard to detect since it looks like a normal Kerberos ticket
+- Even resetting the Administrator password does not stop it — only changing krbtgt password twice does
+
+## What I Needed Before Starting
+
+To perform this attack, I needed the following prerequisites:
+
+```
+| Requirement         |                                      Why It Was Needed                               |
+|---------------------|--------------------------------------------------------------------------------------|
+| Domain Admin Access | Required to run Mimikatz on the Domain Controller and extract sensitive information. |
+| `krbtgt` NTLM Hash  | Used to forge a valid Kerberos Ticket Granting Ticket (Golden Ticket).               |
+| Domain SID          | Required when constructing the forged Kerberos ticket.                               |
+| Domain Name         | Required when generating the Golden Ticket.                                          |
+```
