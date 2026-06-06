@@ -623,3 +623,27 @@ VICTIM-2$:des-cbc-md5:7ac1431fd0f20298
 - Review accounts with SeImpersonatePrivilege
 - Enable Credential Guard
 - Monitor suspicious process activity
+
+# References
+
+### MITRE ATT&CK
+
+- [Access Token Manipulation (T1134)](https://attack.mitre.org/techniques/T1134/)
+
+### Microsoft Documentation
+
+- [Access Tokens Documentation](https://learn.microsoft.com/en-us/windows/win32/secauthz/access-tokens)
+
+- [Credential Guard Documentation](https://learn.microsoft.com/en-us/windows/security/identity-protection/credential-guard/)
+
+### Additional Resources
+
+- [Windows Privileges Documentation](https://learn.microsoft.com/en-us/windows/win32/secauthz/privileges)
+
+- [Security Auditing Overview](https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/security-auditing-overview)
+
+### Tools Used During Testing
+
+- [Metasploit Framework](https://www.metasploit.com/)
+
+- [Meterpreter Documentation](https://docs.metasploit.com/docs/using-metasploit/advanced/meterpreter/)
