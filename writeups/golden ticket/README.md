@@ -20,6 +20,9 @@
 - [Step 6 — Opening a CMD Shell with the Golden Ticket](#step-6--opening-a-cmd-shell-with-the-golden-ticket)
 - [Step 7 — Accessing Victim Machine File System](#step-7--accessing-victim-machine-file-system)
 - [Step 8 — Getting a Shell on the Victim Machine](#step-8--getting-a-shell-on-the-victim-machine)
+- [Mitigations](#mitigations)
+- [Key Takeaways](#key-takeaways)
+- [References](#references)
 
 ## What is a Golden Ticket?
 
@@ -301,3 +304,58 @@ Complete control over the victim machine
 ```
 
 This is the final proof that the Golden Ticket attack worked from end to end — I moved from the Domain Controller all the way into a victim machine using nothing but a forged Kerberos ticket.
+
+## Mitigations
+
+- Protect the krbtgt Accoun
+- Harden Domain Admin Access
+- Protect LSASS from Mimikat
+- Detection and Monitoring
+- Enforce AES over RC4
+- Limit Lateral Movement
+
+
+
+## Key Takeaways
+
+| # | Takeaway |
+|---|----------|
+| 1 | `krbtgt` is the most sensitive account in any Active Directory domain. Protecting it is not optional. |
+| 2 | Resetting the Administrator password after this attack does absolutely nothing. The ticket does not use the user's password at all. |
+| 3 | Forged tickets look completely normal to the Domain Controller. You cannot tell the difference by looking at the ticket alone — you have to look at patterns and anomalies. |
+| 4 | Domain Admin access is the prerequisite. If an attacker never gets there, there is no Golden Ticket. Initial access hardening is where this fight is won or lost. |
+| 5 | A ticket can sit in memory for 10 years. Incident response must include double `krbtgt` rotation — not as optional cleanup but as the mandatory first step. |
+| 6 | Credential Guard is the strongest single technical control here. If LSASS memory is not readable, the hash cannot be stolen. |
+| 7 | RC4 enforcement of AES is not just a performance preference — it is a meaningful detection and prevention layer against the most common Golden Ticket tooling. |
+
+---
+
+## References
+
+### Microsoft Official Docs
+
+- [Kerberos Authentication Overview](https://learn.microsoft.com/en-us/windows-server/security/kerberos/kerberos-authentication-overview)
+- [Credential Guard](https://learn.microsoft.com/en-us/windows/security/identity-protection/credential-guard/credential-guard)
+- [Protected Users Security Group](https://learn.microsoft.com/en-us/windows-server/security/credentials-protection-and-management/protected-users-security-group)
+- [New-KrbtgtKeys.ps1 — Official Reset Script](https://github.com/microsoft/New-KrbtgtKeys.ps1)
+- [Kerberos krbtgt Password Reset — Microsoft Security Blog](https://techcommunity.microsoft.com/t5/microsoft-security-baselines/kerberos-krbtgt-password-reset-scripts-now-available/ba-p/247381)
+
+### MITRE ATT&CK
+
+- [T1558.001 — Golden Ticket](https://attack.mitre.org/techniques/T1558/001/)
+- [T1003.001 — LSASS Memory Credential Dumping](https://attack.mitre.org/techniques/T1003/001/)
+
+### Tools Referenced in the Writeup
+
+- [Mimikatz by gentilkiwi](https://github.com/gentilkiwi/mimikatz)
+- [Sysinternals PsExec](https://learn.microsoft.com/en-us/sysinternals/downloads/psexec)
+- [Evil-WinRM](https://github.com/Hackplayers/evil-winrm)
+
+### Further Reading
+
+- [Sean Metcalf — Golden Ticket Attacks & Defenses (ADSecurity.org)](https://adsecurity.org/?p=1640)
+- [SANS — Kerberos Attacks: Golden Tickets, Silver Tickets & More](https://www.sans.org/blog/kerberos-in-the-crosshairs-golden-tickets-silver-tickets-mitm-more/)
+
+---
+
+*Part of the ShahinSecLab Active Directory Attack Series — June 2026*
