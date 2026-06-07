@@ -4,7 +4,7 @@
 **Author:** ShahinSecLab  
 **Category:** Credential Capture  
 **Difficulty:** Easy  
-**Tools:** mimikatz, Evil-winrm
+**Tools:** Mimikatz, PSExec, Evil-WinRM
 
 ## Table of Contents
 
@@ -21,12 +21,12 @@
 - [Step 7 — Accessing Victim Machine File System](#step-7--accessing-victim-machine-file-system)
 - [Step 8 — Getting a Shell on the Victim Machine](#step-8--getting-a-shell-on-the-victim-machine)
 
-# What is a Golden Ticket ?
+## What is a Golden Ticket?
 
 A Golden Ticket is a forged Kerberos ticket that gives an attacker unlimited access to every resource in the domain — forever, or until the krbtgt account password is changed twice.
 The whole attack is based on one thing — the krbtgt account. This is a special account in Active Directory that signs every single Kerberos ticket in the domain. If I get its password hash, I can forge my own tickets and pretend to be any user, including Domain Admin — without ever touching the real account.
 
-# Why This Attack is Dangerous
+## Why This Attack is Dangerous
 
 - The forged ticket works even if the real user's password is changed
 - It bypasses normal authentication completely
@@ -47,7 +47,7 @@ To perform this attack, I needed the following prerequisites:
 | Domain Name         | Required when generating the Golden Ticket.                                          |
 ```
 
-# What I Understood During the Process
+## What I Understood During the Process
 
 While working through this attack I realized that:
 
