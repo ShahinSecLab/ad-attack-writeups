@@ -314,8 +314,6 @@ This is the final proof that the Golden Ticket attack worked from end to end —
 - Enforce AES over RC4
 - Limit Lateral Movement
 
-
-
 ## Key Takeaways
 
 | # | Takeaway |
@@ -355,7 +353,3 @@ This is the final proof that the Golden Ticket attack worked from end to end —
 
 - [Sean Metcalf — Golden Ticket Attacks & Defenses (ADSecurity.org)](https://adsecurity.org/?p=1640)
 - [SANS — Kerberos Attacks: Golden Tickets, Silver Tickets & More](https://www.sans.org/blog/kerberos-in-the-crosshairs-golden-tickets-silver-tickets-mitm-more/)
-
----
-
-*Part of the ShahinSecLab Active Directory Attack Series — June 2026*

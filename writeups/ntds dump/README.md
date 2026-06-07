@@ -15,6 +15,8 @@
 - [Step 2 — NTDS Dump with NetExec](#step---2-ntds-dump--netexec)
 - [Step 3 — Getting a Shell with Evil-WinRM](#step---3-getting-a-shell-with-evil-winrm)
 - [What I Achieved](#what-i-achieved)
+- [Key Takeaways](#key-takeaways)
+- [References](#references)
 
 
 ## NTDS Dumping 
@@ -152,7 +154,6 @@ I successfully logged in as **Domain Administrator** without ever knowing the re
   <img src="/writeups/ntds dump/images/step3.png" width="600">
 </p>
 
-
 ## What I Achieved
 
 By reaching this stage, I demonstrated that:
@@ -160,3 +161,55 @@ By reaching this stage, I demonstrated that:
 - I had control over a Domain Controller-level environment
 - I could extract sensitive authentication data from Active Directory
 - I could use this data for further analysis and lateral movement in a real scenario
+
+## Mitigations
+
+- Protect NTDS.dit at the File Level
+- Control Who Can Reach the Domain Controller
+- Stop Pass the Hash
+- Harden WinRM and Remote Access
+- Detect the Dump Before It Completes
+- Make Stolen Hashes Useless
+- Audit Privileged Group Membership
+
+
+## Key Takeaways
+
+| # | Takeaway |
+|---|----------|
+| 1 | NTDS.dit is not just a file — it is a copy of every credential in the domain. Treating it like a normal system file is a mistake. |
+| 2 | A Domain Admin account is all an attacker needs to dump the entire database. The access control problem comes before the dump, not during. |
+| 3 | Pass the Hash is what makes this attack so fast and damaging — cracking is optional when you can just use the hash directly. |
+| 4 | NetExec and similar tools are loud if you are watching — they hit SMB, trigger VSS, and write to disk. The signals are there. |
+| 5 | The `krbtgt` hash is inside NTDS.dit — a successful dump also enables Golden Ticket attacks, so the response scope is always larger than just resetting user passwords. |
+| 6 | WinRM is the door Evil-WinRM walks through. If it is open to the whole network, assume it will be used the moment someone has a valid hash. |
+| 7 | Group membership changes that are not alerted on are invisible. A test account sitting in Domain Admins is just as dangerous as a real admin account. |
+
+## References
+
+### Microsoft Official Docs
+
+- [Securing Active Directory — Microsoft Docs](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/best-practices-for-securing-active-directory)
+- [Protected Users Security Group](https://learn.microsoft.com/en-us/windows-server/security/credentials-protection-and-management/protected-users-security-group)
+- [Local Administrator Password Solution (LAPS)](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-overview)
+- [Credential Guard](https://learn.microsoft.com/en-us/windows/security/identity-protection/credential-guard/credential-guard)
+- [Privileged Identity Management (PIM)](https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management/pim-configure)
+- [Windows Security Auditing Event Reference](https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/security-auditing-overview)
+
+### MITRE ATT&CK
+
+- [T1003.003 — OS Credential Dumping: NTDS](https://attack.mitre.org/techniques/T1003/003/)
+- [T1550.002 — Pass the Hash](https://attack.mitre.org/techniques/T1550/002/)
+- [T1078.002 — Valid Accounts: Domain Accounts](https://attack.mitre.org/techniques/T1078/002/)
+- [T1021.006 — Remote Services: Windows Remote Management](https://attack.mitre.org/techniques/T1021/006/)
+
+### Tools Referenced in the Writeup
+
+- [NetExec (NXC)](https://github.com/Pennyw0rth/NetExec)
+- [Evil-WinRM](https://github.com/Hackplayers/evil-winrm)
+
+### Further Reading
+
+- [Sean Metcalf — Extracting Password Hashes from the Ntds.dit File (ADSecurity.org)](https://adsecurity.org/?p=2398)
+- [SANS — Protecting Active Directory from Known Attacks](https://www.sans.org/blog/protecting-active-directory-from-known-attacks/)
+- [Microsoft — Detecting and Mitigating Pass the Hash](https://www.microsoft.com/en-us/download/details.aspx?id=36036)
