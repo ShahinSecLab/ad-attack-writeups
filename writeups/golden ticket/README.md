@@ -58,12 +58,12 @@ Detection is difficult because the ticket looks completely legitimate to the DC
 # Step 1 - Download mimikatz_trunk.zip in kali
 
 First I downloaded mimikatz_trunk.zip from github in kali and then transfer it to dc.
-then I unzip mimikatz_trunk.zip file on dc. 
+Then I unzip mimikatz_trunk.zip file on dc. 
 
 
-# Step 2 - run mimikatz.exe
+# Step 2 - run mimikatz.exe on dc terminal
 
-After that I open cmd and run mimikatz.exe file.
+After that I open cmd on dc. My `Downloads` folder contains `mimikatz.exe` file. So I run mimikatz.exe file in this location.
 
 ```bash
 C:\Users\Administrator\Downloads>mimikatz.exe
@@ -97,6 +97,8 @@ Privilege '20' OK
 
 # Step 3 - Dumping Credentials from Memory
 
+Now I need Domain SID and krbtgt NTLM Hash.
+
 ```bash
 sekurlsa::logonpasswords
 ```
@@ -126,10 +128,8 @@ SID               : S-1-5-21-2745015721-426968701-4006811760-500
 
 ### Credentials Recovered
 
-| User            | Domain       | NTLM Hash                          |
-|-----------------|--------------|------------------------------------|
-| `Administrator` | `READTEAMBD` | `fc525c9683e8fe067095ba2ddc971889` |
-| `REDTEAMBD-DC$` | `READTEAMBD` | `5d61398d1bb36494251624d87522d005` |
+- Domain SID : S-1-5-21-2745015721-426968701-4006811760-500
+- krbtgt NTLM Hash: fc525c9683e8fe067095ba2ddc971889
 
 Got the Administrator NTLM hash sitting right in memory. No cracking needed — I can use this directly for Pass the Hash.
 
@@ -298,7 +298,6 @@ C:\Windows\system32>
 <p align="center">
   <img src="/writeups/golden ticket/images/step8.png" width="600">
 </p>
-
 
 ### What This Proves
 
