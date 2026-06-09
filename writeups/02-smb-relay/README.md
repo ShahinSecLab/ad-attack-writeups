@@ -13,7 +13,7 @@
 - [Lab Setup](#lab-setup)
 - [Attack Flow](#attack-flow)
 - [Step 1: Disable SMB and HTTP in Responder](#step-1-disable-smb-and-http-in-responder)
-- [Step-2: SMB2 Secutiy Mode Check](#step-2-smb2-security-mode-check)
+- [Step-2: Check SMB2 Security Mode](#step-2-check-smb2-security-mode)
 - [Step 3: Create Target List](#step-3-create-target-list)
 - [Step 4: Start Responder](#step-4-start-responder)
 - [Step 5: Start ntlmrelayx](#step-4-start-ntlmrelayx)
@@ -107,7 +107,7 @@ SMB Relay is a network attack where an attacker captures a user's authentication
 
 ### Step 1: Disable SMB and HTTP in Responder
 
-- Open the Responder configuration file:
+- First, I opened the Responder configuration file:
 
 ```bash
 sudo nano /etc/responder/Responder.conf
@@ -117,7 +117,7 @@ sudo nano /etc/responder/Responder.conf
   <img src="/writeups/02-smb-relay/images/step1-1.png" width="600">
 </p>
 
-- Find these lines and change them:
+- Inside the file, I found and changed the following settings:
 
 ```bash
 SMB = Off
@@ -128,7 +128,7 @@ HTTP = Off
   <img src="/writeups/02-smb-relay/images/step1-2.png" width="600">
 </p>
 
-- Save and exit:
+- After that, I saved the file:
 
 ```bash
 CTRL + X
@@ -136,7 +136,9 @@ Y
 ENTER
 ```
 
-### Step-2: SMB2 Secutiy Mode Check
+### Step-2: Check SMB2 Security Mode
+
+I scanned the network to check SMB signing status using Nmap:
 
 - Run:
 ```bash
