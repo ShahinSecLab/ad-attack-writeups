@@ -8,7 +8,7 @@
 
 ## Table of Contents
 
-1. [What is LLMNR?](#what-is-llmnr)
+1. [Introduction?](#introduction)
 2. [Protocol Order (Windows Name Resolution)](#protocol-order-windows-name-resolution)
 3. [How the Attack Works](#how-the-attack-works)
 4. [Lab Setup](#lab-setup)
@@ -22,7 +22,7 @@
 7. [Key Takeaways](#key-takeaways)
 8. [References](#references)
 
-## What is LLMNR?
+## Introduction
 
 LLMNR stands for **Link-Local Multicast Name Resolution.**
 

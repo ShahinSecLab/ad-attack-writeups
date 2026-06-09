@@ -4,7 +4,8 @@
 **Author:** ShahinSecLab  
 **Category:** Network Attack / Credential Capture  
 **Difficulty:** Easy  
-**Tools:** nmap, responder, ntlmrelayx.py
+**Target:** Active Directory Lab
+**Tools:** Nmap, Responder, ntlmrelayx.py
 
 ## Table of Contents
 
