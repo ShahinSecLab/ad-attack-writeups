@@ -231,7 +231,6 @@ Computer Configuration
 → Turn off Multicast Name Resolution
 → Set to: ENABLED
 
-
 **Fix 2 — Disable NBT-NS:**
 
 Control Panel
@@ -241,7 +240,6 @@ Control Panel
 → IPv4 → Advanced
 → WINS tab
 → Select "Disable NetBIOS over TCP/IP"
-
 
 **Fix 3 — Enable Network Access Control (NAC):**
 
@@ -269,7 +267,6 @@ Long complex passwords make hash cracking extremely difficult or impossible.
   </tr>
 </table>
 
-
 ## Key Takeaways
 
 - Works on most corporate networks — LLMNR is on by default
@@ -277,10 +274,9 @@ Long complex passwords make hash cracking extremely difficult or impossible.
 - Full attack takes less than 5 minutes
 - Turning off LLMNR and NBT-NS fully stops this attack
 
-
 ## References
 
-- https://github.com/lgandx/Responder
-- TCM Security — Practical Ethical Hacking
-- MITRE ATT&CK T1557.001
+- [Responder GitHub](https://github.com/lgandx/Responder)
+- [TCM Security — Practical Ethical Hacking](https://academy.tcm-sec.com/p/practical-ethical-hacking-the-complete-course)
+- [MITRE ATT&CK T1557.001](https://attack.mitre.org/techniques/T1557/001/)
 
