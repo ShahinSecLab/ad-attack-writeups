@@ -68,6 +68,14 @@ I had rahimkhan's password from earlier. Ran CrackMapExec across the whole subne
 ```bash
 crackmapexec smb 192.168.5.0/24 -u rahimkhan -d READTEAMBD.local -p Password1 --sam
 ```
+
+- `smb`	- Uses the SMB protocol to communicate with Windows hosts.
+- `192.168.5.0/24` - Target subnet. CrackMapExec will scan all hosts within this network range.
+- `u rahimkhan` - Username used for authentication.
+- `d READTEAMBD.local` - Active Directory domain associated with the user account.
+- `p Password1` - Password for the specified user account.
+- `--sam`	- Dumps local SAM (Security Account Manager) password hashes from systems where administrative access is available.
+
 Output:
 
 ```
