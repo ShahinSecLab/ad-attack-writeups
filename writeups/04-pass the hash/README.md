@@ -37,14 +37,17 @@ When Windows needs to prove who you are over the network, it uses NTLM. Here's t
 ```
 Client                          Server
   |                                |
-  |---- "Hey I want to log in" --> |
-  |<--- "Prove it, here's a nonce" |
-  |---- Hash(your_hash + nonce) -> |
-  |<--- "OK you're in"             |
+  |----- Authentication Request -->|
+  |<------ Challenge (Nonce) ------|
+  |---- Challenge Response ------> |
+  |<------ Access Granted ---------|
   ```
 
-The thing to notice: the server never asks for your password. It asks for a response that was computed using your hash. So if you have the hash, you can compute the same response. The server can't tell the difference.
-Windows uses MD4 to turn your password into a hash (this is the NT hash). That hash lives in memory while you're logged in, sitting in a process called LSASS. That's exactly where tools like Mimikatz go looking.
+The important thing is that the password is never sent across the network. Instead, the client uses the user's NTLM hash to generate a response to the server's challenge.
+
+If an attacker obtains that NTLM hash, they can generate the same valid response without knowing the actual password. From the server's perspective, the authentication appears legitimate.
+
+Windows stores NTLM hashes in memory while a user is logged in. These hashes can often be found in the Local Security Authority Subsystem Service (LSASS) process, which is why credential dumping tools commonly target LSASS.
 
 ## Lab Setup
 
