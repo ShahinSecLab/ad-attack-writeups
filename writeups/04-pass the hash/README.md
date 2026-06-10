@@ -2,7 +2,7 @@
 
 **Date:** May 2026  
 **Author:** ShahinSecLab  
-**Category:** Network Attack / Credential Capture  
+**Category:** Credential Access
 **Difficulty:** Easy  
 **Tools:** crackmapexec, psexec.py, hashcat 
 
@@ -93,7 +93,7 @@ rahimkhan has local admin on both VICTIM-1 and VICTIM-2 — that's what (Pwn3d!)
 One thing to notice — VICTIM-1's Administrator and rahim have the exact same NT hash (64f12cdd...). VICTIM-2's karim has that same hash too. So all three accounts have the same password.
 
 <p align="center">
-  <img src="/writeups/pass the hash/images/step1-1.png" width="600">
+  <img src="/writeups/04-pass the hash/images/step1-1.png" width="600">
 </p>
 
 I then tried psexec into VICTIM-1 using rahimkhan — that succeed:
@@ -116,7 +116,7 @@ Victim-1
 ```
 
 <p align="center">
-  <img src="/writeups/pass the hash/images/step1-2.png" width="600">
+  <img src="/writeups/04-pass the hash/images/step1-2.png" width="600">
 </p>
 
 I'm SYSTEM on VICTIM-1. Now I want to do a proper full hash dump.
@@ -162,7 +162,7 @@ NL$KM:4b8fca52bf95f183bd044d00f506d9a5d7acc0e8e595e93ceab740ae2e583afacbd830185a
 [*] Restoring the disabled state for service RemoteRegistry
 ```
 <p align="center">
-  <img src="/writeups/pass the hash/images/step2-1.png" width="600">
+  <img src="/writeups/04-pass the hash/images/step2-1.png" width="600">
 </p>
 
 
@@ -201,7 +201,7 @@ NL$KM:c7b7b5bda0d33e8662bffb11e1899ab8aaebb5b87948115fcbecc5993510e8604427d5cb0a
 [*] Restoring the disabled state for service RemoteRegistry
 ```
 <p align="center">
-  <img src="/writeups/pass the hash/images/step2-2.png" width="600">
+  <img src="/writeups/04-pass the hash/images/step2-2.png" width="600">
 </p>
 
 ## Step 3 — Save the Hashes
@@ -252,7 +252,7 @@ Hardware.Mon.#01.: Util: 23%
 Password1 is the password behind 64f12cdd... — so Administrator on VICTIM-1, rahim, and karim all use Password1. The other hash 31d6cfe0... is an empty password — that's Guest, DefaultAccount.
 
 <p align="center">
-  <img src="/writeups/pass the hash/images/step4-1.png" width="600">
+  <img src="/writeups/04-pass the hash/images/step4-1.png" width="600">
 </p>
 
 # Step 5 — Pass the Hash with CrackMapExec
@@ -275,7 +275,7 @@ SMB         192.168.5.135   445    VICTIM-1         [+] VICTIM-1\administrator:6
 VICTIM-1 hit. VICTIM-2 failed because its local Administrator has a different hash (31d6cfe0... — blank password). The hash I'm passing only works on machines where Administrator has Password1.
 
 <p align="center">
-  <img src="/writeups/pass the hash/images/step5-1.png" width="600">
+  <img src="/writeups/04-pass the hash/images/step5-1.png" width="600">
 </p>
 
 ## Defense / Mitigation
