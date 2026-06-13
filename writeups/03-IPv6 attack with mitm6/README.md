@@ -16,7 +16,6 @@
    - [Step 3 — Trigger Authentication from Victim](#step-3--trigger-authentication-from-victim)
    - [Step 4 — Relay Succeeds & Loot Retrieved](#step-4--relay-succeeds--loot-retrieved)
    - [Step 5 — Explore Loot Folder](#step-5--explore-loot-folder)
-   - [Step 6 — Credential & Domain Dump](#step-6--credential--domain-dump)
 5. [Mitigations](#mitigations)
 6. [Key Takeaways](#key-takeaways)
 7. [References](#references)
