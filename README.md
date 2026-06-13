@@ -26,6 +26,8 @@ A collection of AD attack writeups for learning and reference.
 \- CrackMapExec
 \- PsExec.py 
 \- mitm6
+\- secretsdump.py
+
 
 
 

