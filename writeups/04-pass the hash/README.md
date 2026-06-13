@@ -8,7 +8,7 @@
 
 ## Table of Contents
 
-- [Overview](#whats-the-point)
+- [Overview](#overview)
 - [How NTLM Auth Actually Works](#how-ntlm-auth-actually-works)
 - [Lab Setup](#lab-setup)
 - [Attack Steps](#attack-steps)
@@ -282,7 +282,7 @@ Password1 is the password behind 64f12cdd... — so Administrator on VICTIM-1, r
 
 # Step 5 — Pass the Hash with CrackMapExec
 
-Now I skip the password completely and just use the hash with -H. Two tries here.
+I used the NTLM hash instead of a password by passing it with the `-H` option in CrackMapExec.
 
 ```bash
 crackmapexec smb 192.168.5.0/24 -u administrator -H 64f12cddaa88057e06a81b54e73b949b --local-auth
@@ -297,13 +297,15 @@ SMB         192.168.5.136   445    VICTIM-2         [-] VICTIM-2\administrator:6
 SMB         192.168.5.135   445    VICTIM-1         [+] VICTIM-1\administrator:64f12cddaa88057e06a81b54e73b949b (Pwn3d!)
 ```
 
-VICTIM-1 hit. VICTIM-2 failed because its local Administrator has a different hash (31d6cfe0... — blank password). The hash I'm passing only works on machines where Administrator has Password1.
+VICTIM-1 was successfully accessed because the Administrator account there uses the same password (Password1), which matches the NTLM hash.
+
+VICTIM-2 failed because its local Administrator account uses a different hash (31d6cfe0d16ae931b73c59d7e0c089c0), which corresponds to a blank password. So the hash I used did not match that system.
 
 <p align="center">
   <img src="/writeups/04-pass the hash/images/step5-1.png" width="600">
 </p>
 
-## Defense / Mitigation
+## Mitigation
 
 Pass-the-Hash works because stolen NTLM hashes can still be reused for authentication. The goal of defense is to stop hash reuse and limit where credentials can travel.
 
@@ -338,7 +340,6 @@ Pass-the-Hash works because stolen NTLM hashes can still be reused for authentic
 - Keep Windows and domain controllers updated
 - Fix known SMB and authentication vulnerabilities
 
----
 
 ## Key Takeaways
 
@@ -349,7 +350,6 @@ Pass-the-Hash works because stolen NTLM hashes can still be reused for authentic
 - Kerberos + proper privilege separation reduces risk significantly
 - Monitoring authentication logs is critical in detection
 
----
 
 ## References
 
