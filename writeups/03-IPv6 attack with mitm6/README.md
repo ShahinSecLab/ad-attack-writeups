@@ -36,9 +36,9 @@ When combined with Impacket’s `ntlmrelayx`, this technique becomes a powerful 
 - Relay to SMB services to access file shares or execute commands
 - Ultimately escalate privileges and potentially achieve **Domain Admin access without cracking passwords**
 
-This attack technique was originally researched and published by security researchers at :contentReference[oaicite:0]{index=0}, including :contentReference[oaicite:1]{index=1}. It remains one of the most impactful internal network attack methods against Active Directory environments.
 
 ## Attack Theory
+
 Why IPv6?
 Windows machines periodically broadcast DHCPv6 Solicit messages looking for an IPv6 gateway and DNS server. By default, these go unanswered on most enterprise networks. mitm6 responds to these broadcasts, assigning the attacker's link-local IPv6 address as the DNS server.
 
