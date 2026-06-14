@@ -169,7 +169,7 @@ Matching Modules
   <img src="/writeups/05-token impersonation attack/images/step1 1.2.png" width="600">
 </p>
 
-### Step 1.3: Use the PsExec Module
+### 1.3 Use PsExec Module
 
 I selected the exploit/windows/smb/psexec module to get a Meterpreter session on the target machine.
 
@@ -192,7 +192,7 @@ msf exploit(windows/smb/psexec) >
 
 This module uses valid Windows credentials to execute a payload over SMB and open a Meterpreter session on the target.
 
-### Step 1.4: View Module Options
+### 1.4 View Module Options
 
 Next, I checked the module options to see which settings needed to be configured.
 
@@ -246,7 +246,7 @@ View the full module info with the info, or info -d command.
   <img src="/writeups/05-token impersonation attack/images/step1 1.4.png" width="600">
 </p>
 
-### Step 1.5: Setting Required Options
+### 1.5 Setting Required Options
 
 Before running the exploit, I set the target machine and login details in Metasploit.
 
@@ -284,7 +284,7 @@ msf exploit(windows/smb/psexec) >
   <img src="/writeups/05-token impersonation attack/images/step1 1.5.png" width="600">
 </p>
 
-### Step 1.6: Get Meterpreter Session
+### 1.6 Get Meterpreter Session
 
 After setting everything, I ran the exploit to get a session on the target machine.
 
@@ -314,7 +314,7 @@ After this, I successfully got a Meterpreter session on the target system.
 </p>
 
 
-## Step 2: Check uid
+## Step 2 - Check UID
 
 After getting a Meterpreter session on the Windows machine, I checked which user I was running as.
 
