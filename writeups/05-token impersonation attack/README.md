@@ -100,8 +100,7 @@ msf6 >
 
 The quiet mode does not change how Metasploit works. It only reduces the amount of information displayed when the console starts.
 
-
-### Step 1.2: Now search for `psexec`
+### Step 1.2: Search for the `PsExec` Module
 
 Next, I searched for the available PsExec modules.
 
@@ -163,10 +162,9 @@ Matching Modules
   <img src="/writeups/token impersonation attack/images/step1 1.2.png" width="600">
 </p>
 
+### Step 1.3: Use the PsExec Module
 
-### Step 1.3: use `exploit/windows/smb/psexec`
-
-This Metasploit module is used to run commands on a remote Windows machine through SMB (port 445) using valid credentials or NTLM hashes.
+I selected the exploit/windows/smb/psexec module to get a Meterpreter session on the target machine.
 
 ```bash
 use exploit/windows/smb/psexec
@@ -185,51 +183,17 @@ msf exploit(windows/smb/psexec) >
   <img src="/writeups/token impersonation attack/images/step1 1.3.png" width="600">
 </p>
 
-**Why it is used:**
+This module uses valid Windows credentials to execute a payload over SMB and open a Meterpreter session on the target.
 
-* To run commands on a remote Windows system
-* When you already have a valid username and password or NTLM hash (Pass-the-Hash)
-* To get a Meterpreter session on the target machine
-* To move from one system to another inside a network
+### Step 1.4: View Module Options
 
-**How it works:**
-
-The module creates a service on the target Windows system through SMB and runs a payload. This gives access to the system using the rights of the logged-in user.
-
-**Use case:**
-
-* After getting access to a system
-* Moving to other machines in the same network
-* Working in a lab or testing environment
-
-### Step 1.4: Display all available settings for a Metasploit module.
+Next, I checked the module options to see which settings needed to be configured.
 
 ```bash
 msf exploit(windows/smb/psexec) > options
 ```
 
 The `options` command is used to display all available settings for a Metasploit module.
-
-**What it shows:**
-
-It lists all required and optional parameters for the selected module.
-
-**Example settings you may see:**
-
-* **RHOSTS** → Target IP address
-* **RPORT** → Target port (default: 445 for SMB)
-* **SMBUSER** → Username for authentication
-* **SMBPASS** → Password or NTLM hash
-* **PAYLOAD** → Payload type to be used
-* **LHOST** → Attacker IP address
-* **LPORT** → Listening port on attacker machine
-
-**Why it is used:**
-
-* To check what values need to be set before running an exploit
-* To verify if all required fields are filled
-* To avoid errors during execution
-
 
 **Output:**
 
