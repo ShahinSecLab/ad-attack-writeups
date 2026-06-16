@@ -1,4 +1,4 @@
-# ntds dumping
+# ntds Dumping
 
 **Date:** June 2026  
 **Author:** ShahinSecLab  
@@ -11,9 +11,10 @@
 - [Overview](#ntds-dumping)
 - [What I Understood During the Process](#what-i-understood-during-the-process)
 - [Why This Step Was Important in the Lab](#why-this-step-was-important-in-the-lab)
-- [Step 1 — Token Impersonation & Privilege Escalation](#step---1-token-impersonation-and-privilege-escallation)
-- [Step 2 — NTDS Dump with NetExec](#step---2-ntds-dump--netexec)
-- [Step 3 — Getting a Shell with Evil-WinRM](#step---3-getting-a-shell-with-evil-winrm)
+- [Steps](#steps)
+  - [Step 1 — Token Impersonation & Privilege Escalation](#step---1-token-impersonation-and-privilege-escallation)
+  - [Step 2 — NTDS Dump with NetExec](#step---2-ntds-dump--netexec)
+  - [Step 3 — Getting a Shell with Evil-WinRM](#step---3-getting-a-shell-with-evil-winrm)
 - [What I Achieved](#what-i-achieved)
 - [Mitigations](#mitigations)
 - [Key Takeaways](#key-takeaways)
@@ -116,7 +117,7 @@ SMB         192.168.5.134   445    REDTEAMBD-DC     [*] grep -iv disabled /root/
 The command completed successfully and extracted the NTLM hashes from the Domain Controller, providing the credential material required for the next phase of the assessment.
 
 <p align="center">
-  <img src="/writeups/ntds dump/images/step2.png" width="600">
+  <img src="/writeups/07-ntds dump/step2.png" width="600">
 </p>
 
 # Step - 3 Getting a Shell with Evil-WinRM
@@ -145,6 +146,9 @@ Once the command runs successfully, I get a full interactive shell on the Domain
 *Evil-WinRM* PS C:\Users\Administrator\Documents> whoami
 readteambd\administrator
 ```
+
+The command executed successfully, giving me an interactive PowerShell session on the Domain Controller with Domain Administrator privileges.
+
 ### Result
 
 ```
@@ -159,7 +163,7 @@ readteambd\administrator
 I successfully logged in as **Domain Administrator** without ever knowing the real password — just the hash was enough to own the box.
 
 <p align="center">
-  <img src="/writeups/ntds dump/images/step3.png" width="600">
+  <img src="/writeups/07-ntds dump/images/step3.png" width="600">
 </p>
 
 ## What I Achieved
