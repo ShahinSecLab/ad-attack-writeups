@@ -4,11 +4,11 @@
 **Author:** ShahinSecLab  
 **Category:** Credential Access  
 **Difficulty:** Medium 
-**Tools:** Impacket, Hashcat
+**Tools:** Impacket, Hashcat, 
 
 # Table of content
 
-- [What is Kerberoasting?](#what-is-kerberoasting)
+- [Introduction](#introduction)
 - [Objective](#Objective)
 - [How Kerberoasting Works](#how-kerberoasting-works)
 - [Lab Setup](#lab-setup)
@@ -22,7 +22,7 @@
 - [Key Takeaways](#key-takeaways)
 - [References](#references)
 
-## What is Kerberoasting?
+## Introduction
 
 In Windows networks, services (like SQL Server, IIS, etc.) are registered with something called an SPN (Service Principal Name). When a user wants to access a service, Windows gives them an encrypted service ticket. That ticket is encrypted using the service account's password hash.
 Here is the problem — any logged-in domain user can request that ticket, no special permissions needed. An attacker can grab that ticket, take it offline, and crack it to recover the real password.
@@ -65,11 +65,11 @@ Service Account Password Recovered
 | Kali Linux          | Attacker          | 192.168.5.128 |
 ```
 
+Before starting the attack, I already had the following valid domain credentials:
 
-I already have..
-- Domain: readteambd.local
-- User: rahimkhan
-- Pass: Password1
+- Domain: `readteambd.local`
+- User: `rahimkhan`
+- Pass: `Password1`
 
 ## Attack Process
 
