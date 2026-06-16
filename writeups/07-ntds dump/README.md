@@ -11,7 +11,7 @@
 - [Overview](#ntds-dumping)
 - [What I Understood During the Process](#what-i-understood-during-the-process)
 - [Why This Step Was Important in the Lab](#why-this-step-was-important-in-the-lab)
-- [Step 1 — Token Impersonation & Privilege Escalation](#step---1)
+- [Step 1 — Token Impersonation & Privilege Escalation](#step---1-token-impersonation-and-privilege-escallation)
 - [Step 2 — NTDS Dump with NetExec](#step---2-ntds-dump--netexec)
 - [Step 3 — Getting a Shell with Evil-WinRM](#step---3-getting-a-shell-with-evil-winrm)
 - [What I Achieved](#what-i-achieved)
@@ -49,11 +49,13 @@ In the attack flow, NTDS dumping represented the final and most powerful stage o
 
 # Steps
 
-## Step - 1
+## Step - 1 Token Impersonation & Privilege Escalation
 
-During the Token Impersonation phase, a user named **"text"** was added to the **Domain Admin group**. After obtaining elevated privileges, I gained control over this account and elevated it to a high-privileged domain user.
+Before performing the NTDS dump, I first carried out a Token Impersonation attack to escalate my privileges within the domain.
 
-In the next stage, I used the credentials of the same user to proceed with the NTDS dumping process as part of post-exploitation activity within the Active Directory environment.
+During this phase, the test user account was added to the Domain Admins group. After successfully impersonating a privileged token, I gained administrative privileges and took control of the test account.
+
+I then used the credentials of this Domain Admin account to authenticate and continue with the NTDS dumping process as part of the post-exploitation phase.
 
 ### Credentials:
 
@@ -61,6 +63,8 @@ In the next stage, I used the credentials of the same user to proceed with the N
 - password: `@shahin123#!`
 
 ## Step - 2 NTDS Dump — NetExec
+
+After obtaining Domain Admin privileges through Token Impersonation, I used the test account to dump the Active Directory database from the Domain Controller.
 
 ```bash
 nxc smb 192.168.5.134 -u test -p '@shahin123#!' --ntds
@@ -79,12 +83,13 @@ nxc smb 192.168.5.134 -u test -p '@shahin123#!' --ntds
 | `--ntds`            | Attempts to extract the NTDS.dit database, which contains Active Directory user password hashes |
 ```
 
-When I ran the command, it connected to the Domain Controller over SMB and pulled the NTDS.dit database. This database holds the NTLM hashes of every single user in the domain — including Domain Admins.
-Once I had those hashes I could:
+When I executed the command, NetExec authenticated to the Domain Controller over SMB using the Domain Admin credentials and successfully dumped the contents of the NTDS.dit database.
 
-- Pass the Hash — log in directly without even cracking the password
-- Crack them offline with Hashcat to get the plaintext passwords
-- Dump plaintext passwords if reversible encryption was enabled on any account
+The dump contained NTLM password hashes for domain users, built-in accounts, and computer accounts. These hashes can be used during post-exploitation for activities such as:
+
+- Pass-the-Hash attacks using NTLM hashes.
+- Offline password cracking with tools such as Hashcat.
+- Extracting additional credential material for further assessment, depending on the environment and account configuration.
 
 **Output:**
 
