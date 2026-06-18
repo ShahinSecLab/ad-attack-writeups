@@ -284,7 +284,7 @@ Checked Service Permissions
 ```bash
 C:\PrivEsc> .\accesschk.exe /accepteula -uwcqv user daclsvc
 ```
-### Output
+**Output:**
 
 ```
 RW daclsvc
@@ -302,3 +302,32 @@ RW daclsvc
 - `SERVICE_CHANGE_CONFIGI` : can change the service binary path
 - `SERVICE_START` : I can start the service
 - `SERVICE_STOP` : I can stop the service
+
+`SERVICE_CHANGE_CONFIG` was the key. It meant I could swap the binary path to my own payload.
+
+<p align="center">
+  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step8-2.png" width="600">
+</p>
+
+## Step 9 — Checking the Service Configuration
+
+```bash
+C:\PrivEsc> sc qc daclsvc
+```
+**Output:**
+
+```
+SERVICE_NAME: daclsvc
+        BINARY_PATH_NAME   : "C:\Program Files\DACL Service\daclservice.exe"
+        SERVICE_START_NAME : LocalSystem
+```
+
+```
+|------Field--------|-----------------------Value-------------------|---------------Meaning--------|
+|BINARY_PATH_NAME   |C:\Program Files\DACL Service\daclservice.exe  |Real service binary location  |
+|SERVICE_START_NAME |LocalSystem                                    |Runs as SYSTEM                |
+```
+
+<p align="center">
+  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step9-1.png.png" width="600">
+</p>
