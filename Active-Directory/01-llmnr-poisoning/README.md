@@ -122,7 +122,7 @@ Since fakeshare does not exist, Windows could not find it through DNS and sent a
 In my lab, the victim machine name was VICTIM-2.
 
 <p align="center">
-  <img src="/writeups//01-llmnr-poisoning/images/step3-1.png" width="600">
+  <img src="/Active-Directory/01-llmnr-poisoning/images/step3-1.png" width="600">
 </p>
 
 Windows first tried DNS, but it could not find the hostname. It then sent an LLMNR request on the network, which was captured by Responder.
@@ -138,7 +138,7 @@ On my Kali machine, Responder captured the victim's NTLMv2 authentication attemp
 ```
 
 <p align="center">
-  <img src="/writeups//01-llmnr-poisoning/images/step3-2.png" width="600">
+  <img src="/Active-Directory/01-llmnr-poisoning/images/step3-2.png" width="600">
 </p>
 
 ## Step 4 — Save the Captured Hash
@@ -147,7 +147,7 @@ On my Kali machine, Responder captured the victim's NTLMv2 authentication attemp
 First, I copied the NTLMv2 hash captured by Responder.
 
 <p align="center">
-  <img src="/writeups//01-llmnr-poisoning/images/step4-1.png" width="600">
+  <img src="/Active-Directory/01-llmnr-poisoning/images/step4-1.png" width="600">
 </p>
 
 - step 4.2: Create a File for the Hash
@@ -160,14 +160,14 @@ nano hash.txt
 After running the command, I pressed Enter to open the file.
 
 <p align="center">
-  <img src="/writeups//01-llmnr-poisoning/images/step4-2.png" width="600">
+  <img src="/Active-Directory/01-llmnr-poisoning/images/step4-2.png" width="600">
 </p>
 
 - step 4.4: Paste the Hash.
 Once Nano opened, I pasted the captured NTLMv2 hash into the file.
 
 <p align="center">
-  <img src="/writeups//01-llmnr-poisoning/images/step4-3.png" width="600">
+  <img src="/Active-Directory/01-llmnr-poisoning/images/step4-3.png" width="600">
 </p>
 
 - step 4.5: Save the File
@@ -215,7 +215,7 @@ Password1
 ```
 
 <p align="center">
-  <img src="/writeups//01-llmnr-poisoning/images/step5.png" width="600">
+  <img src="/Active-Directory/01-llmnr-poisoning/images/step5.png" width="600">
 </p>
 
 This confirmed that the captured NTLMv2 hash could be cracked using a common wordlist because the password was weak.
