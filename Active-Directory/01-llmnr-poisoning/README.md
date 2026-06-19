@@ -61,14 +61,14 @@ Victim                    Network                         Attacker
 
 ## Lab Setup
 ```
-|   Component  |        Details                   |
-|--------------|----------------------------------|
-| Attacker     |       Kali Linux                 | 
-| Victim       |       Windows 10                 | 
-| Tool 1       |       Responder                  |
-| Tool 2       |       Hashcat                    |
-| Attacker IP  |       192.168.5.128              |
-| Victim IP    |       192.168.5.136              |
+|   Component  |        Details          |
+|--------------|-------------------------|
+| Attacker     |       Kali Linux        | 
+| Victim       |       Windows 10        | 
+| Tool 1       |       Responder         |
+| Tool 2       |       Hashcat           |
+| Attacker IP  |       192.168.5.128     |
+| Victim IP    |       192.168.5.136     |
 ```
 Both machines on same VirtualBox Host-Only network.
 
