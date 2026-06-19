@@ -210,9 +210,9 @@ hashcat -m 5600 hash.txt /usr/share/wordlists/rockyou.txt
 | /usr/share/wordlists/rockyou.txt | Wordlist used for dictionary attack (rockyou) |
 ```
 
-**Output:**
+After a short time, Hashcat successfully cracked the password and displayed the result.
 
-After a short time, Hashcat successfully cracked the password and displayed the result:
+**Output:**
 
 ```
 KARIM::VICTIM-2:08c4e1b5073681c1:7acce8f5708e0b1ea3bcbcf99f26fa01:10101000000000011

