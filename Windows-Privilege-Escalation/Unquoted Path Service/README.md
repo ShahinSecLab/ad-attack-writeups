@@ -97,3 +97,58 @@ Metasploit caught the shell
                         ↓
 whoami → nt authority\system
 ```
+
+## Step 1 — Finding the Unquoted Path Service
+
+`winPEAS` flagged unquotedsvc while scanning — it showed the binary path had spaces but no quotes around it.
+
+```bash
+C:\PrivEsc>winPEASany.exe
+```
+
+**Output:**
+
+```
+unquotedsvc(Unquoted Path Service)[C:\Program Files\Unquoted Path Service\Common Files\unquotedpathservice.exe] - Manual - Stopped - No quotes and Space detected 
+```
+
+<p align="center">
+  <img src="/Windows-Privilege-Escalation/unquoted path service/images/step1-1.png" width="600">
+</p>
+
+### Checked the Service Configuration
+
+```bash
+C:\PrivEsc> sc qc unquotedsvc
+```
+
+***Output:**
+
+```
+[SC] QueryServiceConfig SUCCESS
+
+SERVICE_NAME: unquotedsvc
+        TYPE               : 10  WIN32_OWN_PROCESS 
+        START_TYPE         : 3   DEMAND_START
+        ERROR_CONTROL      : 1   NORMAL
+        BINARY_PATH_NAME   : C:\Program Files\Unquoted Path Service\Common Files\unquotedpathservice.exe
+        LOAD_ORDER_GROUP   : 
+        TAG                : 0
+        DISPLAY_NAME       : Unquoted Path Service
+        DEPENDENCIES       : 
+        SERVICE_START_NAME : LocalSystem
+```
+
+```markdown
+| Field | Value | What it means |
+|------|-------|---------------|
+| **BINARY_PATH_NAME** | `C:\Program Files\Unquoted Path Service\Common Files\unquotedpathservice.exe` | No quotes around the service path, making it vulnerable to an **Unquoted Service Path** attack. |
+| **SERVICE_START_NAME** | `LocalSystem` | The service runs with **SYSTEM** privileges. |
+```
+
+
+
+<!-- - `BINARY_PATH_NAME`: `C:\Program Files\Unquoted Path Service\ -->No quotes around the path — vulnerable
+                    Common Files\unquotedpathservice.exe`
+
+- `SERVICE_START_NAME`: LocalSystem--> Runs as SYSTEM -->
