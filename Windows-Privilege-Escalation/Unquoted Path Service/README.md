@@ -140,15 +140,53 @@ SERVICE_NAME: unquotedsvc
 ```
 
 ```markdown
-| Field | Value | What it means |
-|------|-------|---------------|
-| **BINARY_PATH_NAME** | `C:\Program Files\Unquoted Path Service\Common Files\unquotedpathservice.exe` | No quotes around the service path, making it vulnerable to an **Unquoted Service Path** attack. |
-| **SERVICE_START_NAME** | `LocalSystem` | The service runs with **SYSTEM** privileges. |
+| **Field** | **Value** | **What it Means** |
+|:---------|:----------|:------------------|
+| **BINARY_PATH_NAME** | `C:\Program Files\Unquoted Path Service\Common Files\unquotedpathservice.exe` | The service executable path is **not enclosed in quotation marks**, making it vulnerable to an **Unquoted Service Path** attack. |
+| **SERVICE_START_NAME** | `LocalSystem` | The service runs under the **LocalSystem (SYSTEM)** account, so successful exploitation results in **SYSTEM-level privileges**. |
 ```
 
+## Checked Write Permissions on C:\
 
+```bash
+C:\PrivEsc>.\accesschk /accepteula -uwdq C:\
+```
 
-<!-- - `BINARY_PATH_NAME`: `C:\Program Files\Unquoted Path Service\ -->No quotes around the path — vulnerable
-                    Common Files\unquotedpathservice.exe`
+**Output:**
 
-- `SERVICE_START_NAME`: LocalSystem--> Runs as SYSTEM -->
+```
+C:\
+  Medium Mandatory Level (Default) [No-Write-Up]
+  RW BUILTIN\Administrators
+  RW NT AUTHORITY\SYSTEM
+```
+No write access for normal users on C:\ — I needed to check deeper.
+
+<p align="center">
+  <img src="/Windows-Privilege-Escalation/unquoted path service/images/step1-2.png" width="600">
+</p>
+
+## Step 2 — Finding a Writable Folder in the Path
+
+I checked each folder in the service path one by one.
+
+Check C:\Program Files\
+
+```bash
+C:\PrivEsc>.\accesschk /accepteula -uwdq "C:\Program Files\"
+```
+
+**Output:**
+
+```
+C:\Program Files
+  Medium Mandatory Level (Default) [No-Write-Up]
+  RW NT SERVICE\TrustedInstaller
+  RW NT AUTHORITY\SYSTEM
+  RW BUILTIN\Administrators
+```
+No write access for normal users here either.
+
+<p align="center">
+  <img src="/Windows-Privilege-Escalation/unquoted path service/images/step2-1.png" width="600">
+</p>
