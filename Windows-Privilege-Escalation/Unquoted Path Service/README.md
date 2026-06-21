@@ -113,7 +113,7 @@ unquotedsvc(Unquoted Path Service)[C:\Program Files\Unquoted Path Service\Common
 ```
 
 <p align="center">
-  <img src="/Windows-Privilege-Escalation/unquoted path service/images/step1-1.png" width="600">
+  <img src="images/step1-1.png" width="600">
 </p>
 
 ### Checked the Service Configuration
@@ -163,7 +163,7 @@ C:\
 No write access for normal users on C:\ — I needed to check deeper.
 
 <p align="center">
-  <img src="/Windows-Privilege-Escalation/unquoted path service/images/step1-2.png" width="600">
+  <img src="images/step1-2.png" width="600">
 </p>
 
 ## Step 2 — Finding a Writable Folder in the Path
