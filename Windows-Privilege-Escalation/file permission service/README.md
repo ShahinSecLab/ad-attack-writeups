@@ -33,24 +33,77 @@ File Permission Service is a local privilege escalation technique. The idea is s
 Windows services often run as SYSTEM. If the actual binary file that the service runs has weak permissions — meaning normal users can overwrite it — I can swap it out with my own payload. The next time the service starts, Windows runs my file thinking it is the real one, and I get a SYSTEM shell.
 
 ## Lab Setup
+
 ```
-|   Component          |         Details          |
-|----------------------|--------------------------|
-| **Attacker Machine** | Kali Linux               |
-| **Attacker IP**      | `192.168.5.128`          |
-| **Victim Machine**   | Windows 10 (MSEDGEWIN10) |
-| **Victim IP**        | `192.168.5.129`          |
-| **Network**          | VMware Host-Only Network |
-| **Domain**           | WORKGROUP                |
+|   Component      |         Details          |
+|------------------|--------------------------|
+| Attacker Machine | Kali Linux               |
+| Attacker IP      | `192.168.5.128`          |
+| Victim Machine   | Windows 10 (MSEDGEWIN10) |
+| Victim IP        | `192.168.5.144`          |
+| Network          | VMware Host-Only Network |
+| Domain           | WORKGROUP                |
 ```
 
 ## Tools Prepared on Kali Before Starting
 
 ```
-|        Tool      |          Location           |         Purpose                            |
-|------------------|-----------------------------|--------------------------------------------|
-| `winPEASany.exe` | `/home/kali/Desktop/tools/` | Find privilege escalation paths.           |
-| `accesschk.exe`  | `/home/kali/Desktop/tools/` | Check file and service permissions.        |
-| `rev.exe`        | `/home/kali/Desktop/`       | Malicious payload generated with `msfvenom`|
-| `Metasploit`     | Built into Kali             | Catch reverse shells.                      |
+|        Tool      |          Location         |         Purpose                            |
+|------------------|---------------------------|--------------------------------------------|
+| winPEASany.exe   | /home/kali/Desktop/tools/ | Find privilege escalation paths.           |
+| accesschk.exe    | /home/kali/Desktop/tools/ | Check file and service permissions.        |
+| rev.exe          | /home/kali/Desktop/       | Malicious payload generated with `msfvenom`|
+| Metasploit       | Built into Kali           | Catch reverse shells.                      |
+```
+
+## What I Needed Before Starting
+
+```
+|         What                      |                          Why                            |
+|-----------------------------------|---------------------------------------------------------|
+| Low-privilege shell on the victim | Starting point for the privilege escalation attack.     |
+| winPEAS                           | To identify services with weak binary file permissions. |
+| accesschk.exe                     | To verify the permissions on the service executable.    |
+| msfvenom                          | To generate the malicious payload.                      |
+| Metasploit                        | To receive the reverse Meterpreter session.             |
+```
+
+## What I Understood During the Process
+
+While working through this attack I realized that:
+
+- Weak file permissions on a service binary are just as dangerous as weak service config permissions
+- If Everyone or BUILTIN\Users has FILE_ALL_ACCESS on a service binary — that machine is wide open
+- Backing up the original binary before replacing it is important so the service does not break permanently
+- Once you have a SYSTEM Meterpreter session, you can dump all password hashes from the machine in one command
+- This kind of misconfiguration is very easy to miss during system setup
+
+## Attack Flow
+
+```
+Already had a low privilege Meterpreter shell on the victim
+                        ↓
+Ran winPEAS — flagged filepermsvc with weak file permissions
+                        ↓
+Checked service config — runs as LocalSystem (SYSTEM)
+                        ↓
+Checked file permissions with accesschk.exe
+                        ↓
+Found FILE_ALL_ACCESS for Everyone and BUILTIN\Users on the binary
+                        ↓
+Backed up original binary to C:\temp
+                        ↓
+Uploaded malicious rev.exe from Kali to victim
+                        ↓
+Replaced filepermservice.exe with rev.exe
+                        ↓
+Started Metasploit listener on port 4444
+                        ↓
+Started filepermsvc service
+                        ↓
+Metasploit caught the shell
+                        ↓
+whoami → nt authority\system
+                        ↓
+Ran hashdump — dumped all password hashes from the machine
 ```
