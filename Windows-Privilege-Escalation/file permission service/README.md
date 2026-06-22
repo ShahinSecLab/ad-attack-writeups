@@ -131,6 +131,8 @@ filepermsvc(File Permissions Service)["C:\Program Files\File Permissions Service
 
 ## Step 2 — Checking the Service Configuration
 
+After finding the vulnerable service with **winPEAS**, I checked its configuration to see how it was set up.
+
 ```bash
 C:\PrivEsc> sc qc filepermsvc
 ```
@@ -150,6 +152,34 @@ SERVICE_NAME: filepermsvc
         DEPENDENCIES       : 
         SERVICE_START_NAME : LocalSystem
 ```
+The output showed that the service runs as **LocalSystem**, which means it starts with **SYSTEM** privileges. It also showed the full path to the service executable, which I would need in the next step.
+
 <p align="center">
   <img src="images/step2-1.png" width="600">
 </p>
+
+## Step 3 — Checking Binary File Permissions with accesschk.exe
+
+To make sure I could replace the service executable, I checked its file permissions using **accesschk.exe**.
+
+```bash
+.\accesschk.exe /accepteula -uwqv "C:\Program Files\File Permissions Service\filepermservice.exe"
+```
+**Output:**
+
+```
+C:\Program Files\File Permissions Service\filepermservice.exe
+  Medium Mandatory Level (Default) [No-Write-Up]
+  RW Everyone
+        FILE_ALL_ACCESS
+  RW NT AUTHORITY\SYSTEM
+        FILE_ALL_ACCESS
+  RW BUILTIN\Administrators
+        FILE_ALL_ACCESS
+  RW BUILTIN\Users
+        FILE_ALL_ACCESS
+```
+- `RW Everyone — FILE_ALL_ACCESSE`: very single user on the machine can replace this file
+- `RW BUILTIN\Users — FILE_ALL_ACCESS`: Normal users have full control over the binary
+
+`FILE_ALL_ACCESS` for `Everyone` confirmed I could replace the real binary with my own payload.
