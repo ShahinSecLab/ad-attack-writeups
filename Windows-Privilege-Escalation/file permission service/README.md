@@ -19,7 +19,7 @@
 - [Step 3 — Checking Binary File Permissions with accesschkexe](#step-3--checking-binary-file-permissions-with-accesschkexe)
 - [Step 4 — Backing Up the Original Service Binary](#step-4--backing-up-the-original-service-binary)
 - [Step 5 — Uploading the Payload and Replacing the Service Binary](#step-5--uploading-the-payload-and-replacing-the-service-binary)
-- [Step 6 — Getting a SYSTEM Shell and Dumping Hashes](#step-6--getting-a-system-shell-and-dumping-hashes)
+- [Step 6 — Getting a SYSTEM Shell](#step-6--getting-a-system-shell)
 - [How Defenders Can Catch This](#how-defenders-can-catch-this)
 - [How to Prevent It](#how-to-prevent-it)
 - [What I Achieved](#what-i-achieved)
