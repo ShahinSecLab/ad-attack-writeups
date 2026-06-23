@@ -22,3 +22,46 @@
 - [How Defenders Can Catch This](#how-defenders-can-catch-this)
 - [How to Prevent It](#how-to-prevent-it)
 - [What I Achieved](#what-i-achieved)
+
+# Introduction
+
+DLL Hijacking is a privilege escalation technique that takes advantage of how Windows loads DLL files. When a service or program looks for a DLL, Windows searches through a list of folders in a specific order. If I can drop a malicious DLL in a folder that Windows checks before the real one — and that folder is writable by normal users — Windows loads my DLL instead. Since the service runs as SYSTEM, my malicious DLL runs as SYSTEM too.
+
+# Why This Attack Works
+
+When a Windows service starts, it loads DLL files it needs to run. Windows searches for those DLL files in this order:
+```
+1. The folder where the application is installed
+2. C:\Windows\System32
+3. C:\Windows\System
+4. C:\Windows
+5. The current working directory
+6. Folders listed in the PATH environment variable
+```
+If a folder early in that search order is writable by normal users, I can drop a malicious DLL there. Windows picks it up before ever finding the real one — and runs it as `SYSTEM`.
+
+## Lab Setup
+
+```
+|    Component     |         Details         |
+|------------------|-------------------------|
+| Attacker Machine | Kali Linux              |
+| Attacker IP      | 192.168.5.128           |
+| Victim Machine   | Windows 10 (MSEDGEWIN10)|
+| Victim IP        | 192.168.5.144           |
+| Network          | VMware Host-Only Network|
+| Domain           | WORKGROUP               |
+```
+
+
+## Tools Prepared on Kali Before Starting
+
+```
+|       Tool     |          Location         |            Purpose              |
+|----------------|---------------------------|---------------------------------|
+| winPEASany.exe | /home/kali/Desktop/tools/ | Find privilege escalation paths |
+| accesschk.exe  | /home/kali/Desktop/tools/ | Check service permissions       |
+| msfvenom       | Built into Kali           | Generate malicious DLL payload  |
+| Metasploit     | Built into Kali           | Catch reverse shells            |
+| Python3        | Built into Kali           | Host files over HTTP            |
+```
