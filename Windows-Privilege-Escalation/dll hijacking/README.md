@@ -65,3 +65,54 @@ If a folder early in that search order is writable by normal users, I can drop a
 | Metasploit     | Built into Kali           | Catch reverse shells            |
 | Python3        | Built into Kali           | Host files over HTTP            |
 ```
+
+## What I Needed Before Starting
+
+```
+|         What                      |                          Why                            |
+|-----------------------------------|---------------------------------------------------------|
+| Low-privilege shell on the victim | Starting point for the privilege escalation attack.     |
+| winPEAS                           | To identify services with weak binary file permissions. |
+| accesschk.exe                     | To verify the permissions on the service executable.    |
+| msfvenom                          | To generate the malicious DLL                           |
+| Metasploit                        | To receive the reverse Meterpreter session.             |
+```
+
+## What I Understood During the Process
+While working through this attack I realized that:
+
+- Windows trusting folders in the PATH to load DLLs is a big security risk
+- If any folder in the DLL search order is writable by normal users, the machine is open to this attack
+- The DLL payload is different from an EXE payload — you have to use -f dll in msfvenom
+- hashdump only works from Meterpreter, not from a CMD shell
+- Once you get a SYSTEM Meterpreter session, you can dump every password hash on the machine in one command
+
+## Attack Flow
+
+Already had a low privilege Meterpreter shell on the victim
+                        ↓
+Ran winPEAS — flagged C:\Temp as writable by Authenticated Users
+                        ↓
+Checked service permissions with accesschk.exe
+                        ↓
+Found SERVICE_START and SERVICE_STOP for dllsvc
+                        ↓
+Checked service config — dllsvc runs as LocalSystem (SYSTEM)
+                        ↓
+Started dllsvc to confirm it loads DLLs from C:\Temp
+                        ↓
+Generated malicious hijackme.dll on Kali with msfvenom
+                        ↓
+Started Metasploit listener on port 4444
+                        ↓
+Downloaded hijackme.dll to C:\Temp on the victim using certutil
+                        ↓
+Stopped and restarted dllsvc
+                        ↓
+Service loaded hijackme.dll from C:\Temp as SYSTEM
+                        ↓
+Metasploit caught the shell
+                        ↓
+whoami → nt authority\system
+                        ↓
+Ran hashdump — dumped all password hashes from the machine
