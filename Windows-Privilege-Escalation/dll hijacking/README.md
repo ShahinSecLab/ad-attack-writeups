@@ -1,12 +1,11 @@
 # DLL Hijacking
 
-```
-Date: June 2026
-Author: ShahinSecLab
-Category: Privilege Escalation
-Difficulty: Medium
-Tools: msfvenom, Metasploit, winPEAS, accesschk.exe, certutil
-```
+**Date:** June 2026
+**Author:** ShahinSecLab
+**Category:** Privilege Escalation
+**Difficulty:** Medium
+**Tools:** msfvenom, Metasploit, winPEAS, accesschk.exe, certutil
+
 
 # Table of Contents
 
