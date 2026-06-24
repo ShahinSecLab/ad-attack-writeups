@@ -121,7 +121,7 @@ Ran hashdump — dumped all password hashes from the machine
 
 ## Step 1 — Finding the DLL Hijacking Opportunity
 
-I already had a Meterpreter shell on the victim machine as a low privilege user. I ran winPEAS to scan for privilege escalation paths.
+**I already had a Meterpreter shell on the victim machine as a low privilege user**. I ran winPEAS to scan for privilege escalation paths.
 winPEAS flagged a DLL Hijacking opportunity straight away:
 
 ```bash
