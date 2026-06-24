@@ -45,3 +45,64 @@ The key thing here is I do not need to touch the task itself. I just modify the 
 | Network          | VMware Host-Only Network|
 | Domain           | WORKGROUP               |
 ```
+
+## Tools Prepared on Kali Before Starting
+
+```
+| Tool            | Location                    | Purpose                                 |
+|-----------------|-----------------------------|-----------------------------------------|
+| accesschk.exe   | /home/kali/Desktop/tools/   | Check file permissions                  |
+| rev.exe         | C:\PrivEsc\ on victim       | Malicious payload already on the victim |
+| Metasploit      | Built into Kali             | Catch reverse shells                    |
+```
+
+## What I Needed Before Starting
+
+```
+|                   What                | Why                                   |
+|---------------------------------------|---------------------------------------|
+| Low privilege Meterpreter shell       | Starting point for the attack         |
+| accesschk.exe                       | To check file permissions on scripts  |
+| rev.exe already on the victim       | Payload to execute as SYSTEM          |
+| Metasploit listener                   | To catch the shell when the task fires|
+```
+
+## What I Understood During the Process
+
+While working through this attack I realized that:
+
+- Scheduled tasks running as SYSTEM are very common in Windows environments
+- If the script a task runs is writable by normal users, the machine is open to this attack
+- I did not need to touch the scheduled task itself — just the script it runs
+- The attack is completely passive once the payload is injected — I just wait for the task to fire
+- Always check custom folders like C:\DevTools, C:\BGinfo, C:\Temp — admins often leave weak permissions on these
+
+## Attack Flow
+
+```
+Already had a low privilege Meterpreter shell on the victim
+                        ↓
+Dropped into a CMD shell and explored C:\
+                        ↓
+Found C:\DevTools folder with CleanUp.ps1 inside
+                        ↓
+Opened CleanUp.ps1 — comment said it runs every minute as SYSTEM
+                        ↓
+Checked file permissions with accesschk.exe
+                        ↓
+Found full write access for normal users on CleanUp.ps1
+                        ↓
+Appended C:\PrivEsc\rev.exe to the end of CleanUp.ps1
+                        ↓
+Started Metasploit listener on port 4444
+                        ↓
+Waited for the scheduled task to fire
+                        ↓
+Task ran CleanUp.ps1 as SYSTEM — hit the injected line
+                        ↓
+rev.exe executed as SYSTEM
+                        ↓
+Metasploit caught the shell
+                        ↓
+Meterpreter session opened as SYSTEM
+```
