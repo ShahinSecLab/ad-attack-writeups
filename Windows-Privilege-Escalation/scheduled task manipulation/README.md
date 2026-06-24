@@ -272,3 +272,13 @@ meterpreter >
 </p>
 
 The scheduled task ran CleanUp.ps1 as SYSTEM, hit the injected line, and executed rev.exe — giving me a Meterpreter shell back on Kali without me doing anything else.
+
+## What I Achieved
+
+By completing this attack I showed that:
+
+- A scheduled task running as SYSTEM with a writable script was enough to get full control of the machine
+- No exploits or CVEs were needed — just a misconfiguration and one echo command
+- The attack was completely passive — I injected the payload and just waited for the task to fire
+- Custom folders like C:\DevTools are often overlooked during security audits
+- A developer's comment in the script even admitted the permissions were wrong — but it never got fixed
