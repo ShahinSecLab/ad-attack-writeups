@@ -52,3 +52,107 @@ If sudo allows a user to run one of these binaries as root, the user can trigger
 | `sudo -l` access                         | To see which commands I could run as root      |
 | GTFOBins website                         | To find the shell escape for the allowed binary|
 ```
+
+## What I Understood During the Process
+
+While working through this attack I realized that:
+
+- Running sudo -l should be the very first thing checked on any Linux box
+- A long list of NOPASSWD binaries is basically a free pass to root if even one of them is on GTFOBins
+- GTFOBins makes this attack almost effortless — you do not need to remember exploit syntax, just search the binary and copy the command
+- Many admins do not realize how dangerous it is to give sudo access to tools like find, vim, or less
+- One misconfigured sudo rule was enough to go from a normal user straight to full root with (ALL) ALL permissions
+
+## Attack Flow
+```
+Connected to the target over SSH with low privilege credentials
+                        ↓
+Checked sudo permissions with sudo -l
+                        ↓
+Found a long list of binaries allowed as root with NOPASSWD
+                        ↓
+Searched GTFOBins for the find binary
+                        ↓
+Found the Sudo function escape command for find
+                        ↓
+Ran sudo find . -exec /bin/sh \; -quit
+                        ↓
+Got a root shell immediately
+                        ↓
+Confirmed with whoami and id
+                        ↓
+Checked sudo -l as root — full (ALL) ALL access confirmed
+```
+
+## Step 1 — Connecting to the Target and Checking Sudo Permissions
+
+### Connected to the Target via SSH
+
+```bash
+ssh -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedAlgorithms=+ssh-rsa user@192.168.5.133
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## ## How Defenders Can Catch This
+```
+|                                            Indicator                                   |         What to look for          |
+|----------------------------------------------------------------------------------------|-----------------------------------|
+| `sudo -l` run by a non-admin user                                                      | Audit logs (`/var/log/auth.log`)  |
+| Unexpected root shell spawned from a non-root user session                             | Process monitoring (`auditd`)     |
+| Use of `find`, `vim`, `awk`, or similar tools with sudo right before a UID change to 0 | Command history and session logs  |
+| `sudoers` file containing risky `NOPASSWD` entries                                     | Regular sudoers file audits       |
+```
+
+## How to Prevent It
+
+Never give sudo access to shell-capable binaries unless absolutely necessary
+Tools like `find`, `vim`, `awk`, `less`, `man`, `nmap`, and many others can spawn shells. Check every binary against GTFOBins before adding it to a sudoers rule.
+Always require a password for sudo unless there is a strong reason not to
+Avoid NOPASSWD wherever possible. It removes a critical layer of protection.
+Restrict sudo rules to exact arguments, not the whole binary
+Instead of allowing the full binary, restrict it to specific safe arguments using sudoers syntax:
+
+```bash
+user ALL=(root) NOPASSWD: /usr/bin/find /var/log -type f
+```
+
+### Audit sudoers file regularly
+
+```bash
+sudo visudo -c
+cat /etc/sudoers
+ls /etc/sudoers.d/
+```
+
+### Check GTFOBins for every binary granted sudo access
+
+Before granting sudo rights to any tool, search it on gtfobins.github.io to see if it has a known privilege escalation path.
+
+## What I Achieved
+
+By completing this attack I showed that:
+
+- A single misconfigured sudo rule was enough to go from a normal user to full root access
+- No exploits, CVEs, or complex techniques were needed — just a list of NOPASSWD binaries and GTFOBins
+- This is one of the most common privilege escalation paths found in real Linux environments
+- Admins often do not realize how dangerous it is to give sudo access to everyday tools like find or vim
