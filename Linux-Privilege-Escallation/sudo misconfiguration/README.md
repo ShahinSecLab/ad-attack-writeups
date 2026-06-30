@@ -24,3 +24,31 @@
 - [How to Prevent It](#how-to-prevent-it)
 - [What I Achieved](#what-i-achieved)
 
+## Introduction
+
+Sudo Misconfiguration is one of the most common and easiest privilege escalation techniques on Linux. When a normal user is allowed to run certain binaries as root through sudo — especially with NOPASSWD — and that binary has a way to spawn a shell or execute commands, the user can break out into a full root shell with almost no effort.
+
+## Why This Attack Works
+
+Sudo is meant to let normal users run specific commands as root without giving them full root access. But the problem comes in when the binaries allowed through sudo are not just simple, harmless tools. Many common Linux binaries like find, vim, awk, less, nmap, and man have hidden functions that let them execute shell commands.
+If sudo allows a user to run one of these binaries as root, the user can trigger that hidden shell escape function. Since the binary itself is running as root, the shell it spawns is also root — completely bypassing the whole point of sudo restrictions.
+
+## Lab Setup
+```
+| Component        | Details                                  |
+|------------------|------------------------------------------|
+| Attacker Machine | Kali Linux                               |
+| Victim Machine   | Debian Linux                             |
+| Victim IP        | 192.168.5.133                            |
+| Access Method    | SSH with valid low-privilege credentials |
+| Network          | VMware Host-Only Network                 |
+```
+
+## What I Needed Before Starting
+```
+| What                                     | Why                                            |
+|------------------------------------------|------------------------------------------------|
+| SSH credentials for a low-privilege user | Starting point for the attack                  |
+| `sudo -l` access                         | To see which commands I could run as root      |
+| GTFOBins website                         | To find the shell escape for the allowed binary|
+```
