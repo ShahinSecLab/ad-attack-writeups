@@ -118,9 +118,31 @@ It prompted for the password right after the connection request, I typed passwor
 
 I logged in as `user` — a normal low privilege account on the system.
 
+## Checking Sudo Permissions
 
+```bash
+user@debian:~$ sudo -l
+```
+**Output:**
 
+```
+Matching Defaults entries for user on this host:
+    env_reset, env_keep+=LD_PRELOAD, env_keep+=LD_LIBRARY_PATH
 
+User user may run the following commands on this host:
+    (root) NOPASSWD: /usr/sbin/iftop
+    (root) NOPASSWD: /usr/bin/find
+    (root) NOPASSWD: /usr/bin/nano
+    (root) NOPASSWD: /usr/bin/vim
+    (root) NOPASSWD: /usr/bin/man
+    (root) NOPASSWD: /usr/bin/awk
+    (root) NOPASSWD: /usr/bin/less
+    (root) NOPASSWD: /usr/bin/ftp
+    (root) NOPASSWD: /usr/bin/nmap
+    (root) NOPASSWD: /usr/sbin/apache2
+    (root) NOPASSWD: /bin/more
+```
+The output showed that I could run several binaries as root without entering a password. Some of these binaries are listed on GTFOBins because they can be used to escape to a root shell when they are allowed through `sudo`.
 
 
 
