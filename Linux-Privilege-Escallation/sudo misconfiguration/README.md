@@ -92,10 +92,10 @@ Checked sudo -l as root — full (ALL) ALL access confirmed
 ssh -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedAlgorithms=+ssh-rsa user@192.168.5.133
 ```
 
-`-o HostKeyAlgorithms=+ssh-rsa` : Allows older RSA host key algorithm — needed for older Linux systems
-`-o PubkeyAcceptedAlgorithms=+ssh-rsa` : Allows older RSA public key algorithm for authentication
-`192.168.5.133` : Target IP
-`user`: User Name
+- `-o HostKeyAlgorithms=+ssh-rsa` : Allows older RSA host key algorithm — needed for older Linux systems
+- `-o PubkeyAcceptedAlgorithms=+ssh-rsa` : Allows older RSA public key algorithm for authentication
+- `192.168.5.133` : Target IP
+- `user`: User Name
 
 **Output:**
 
@@ -122,7 +122,7 @@ I logged in as `user` — a normal low privilege account on the system.
   <img src="images/step1-1.png" width="600">
 </p>
 
-## Checking Sudo Permissions
+### Checking Sudo Permissions
 
 ```bash
 user@debian:~$ sudo -l
@@ -161,6 +161,10 @@ From the list of binaries I could run as root, I chose find because it is one of
 ```
 I then went to GTFOBins and searched for find.
 The find page listed several functions, including Shell, File Write, SUID, and Sudo. Since I was allowed to run find with sudo, I opened the Sudo section to get the command needed to spawn a root shell.
+
+<p align="center">
+  <img src="images/step2-1.png.png" width="600">
+</p>
 
 ## Step 3 — Abusing find with Sudo to Get a Root Shell
 
@@ -205,8 +209,9 @@ uid=0(root) gid=0(root) groups=0(root)
   <img src="images/step4-1.png" width="600">
 </p>
 
+I went from a normal low privilege user straight to a fully unrestricted root account, all from one misconfigured sudo rule on the find binary.
 
-## ## How Defenders Can Catch This
+## How Defenders Can Catch This
 ```
 |                                            Indicator                                   |         What to look for          |
 |----------------------------------------------------------------------------------------|-----------------------------------|
