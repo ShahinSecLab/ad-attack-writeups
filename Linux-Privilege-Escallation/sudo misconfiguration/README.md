@@ -254,3 +254,15 @@ By completing this attack I showed that:
 - No exploits, CVEs, or complex techniques were needed — just a list of NOPASSWD binaries and GTFOBins
 - This is one of the most common privilege escalation paths found in real Linux environments
 - Admins often do not realize how dangerous it is to give sudo access to everyday tools like find or vim
+
+## References
+
+| Resource | Link |
+|----------|------|
+| **GTFOBins** | https://gtfobins.github.io |
+| **GTFOBins — find** | https://gtfobins.github.io/gtfobins/find |
+| **Linux sudo man page** | https://www.man7.org/linux/man-pages/man8/sudo.8.html |
+| **Sudoers file documentation** | https://www.sudo.ws/docs/man/sudoers.man |
+| **MITRE ATT&CK — Sudo and Sudo Caching** | https://attack.mitre.org/techniques/T1548/003 |
+| **HackTricks — Sudo Privilege Escalation** | https://book.hacktricks.xyz/linux-hardening/privilege-escalation#sudo-and-suid |
+| **PayloadsAllTheThings — Sudo Exploitation** | https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Linux%20-%20Privilege%20Escalation.md#sudo-exploitation |
