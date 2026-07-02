@@ -163,7 +163,7 @@ I then went to GTFOBins and searched for find.
 The find page listed several functions, including Shell, File Write, SUID, and Sudo. Since I was allowed to run find with sudo, I opened the Sudo section to get the command needed to spawn a root shell.
 
 <p align="center">
-  <img src="images/step2-1.png.png" width="600">
+  <img src="images/step2-1.png" width="600">
 </p>
 
 ## Step 3 — Abusing find with Sudo to Get a Root Shell
